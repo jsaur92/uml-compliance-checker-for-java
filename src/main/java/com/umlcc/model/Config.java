@@ -4,18 +4,26 @@ import java.util.HashMap;
 
 public class Config {
     private static Config config;
-    private static HashMap<Warning, String> warningMessages;
+    private HashMap<Warning, String> warningMessages;
 
-    private Config() {
-
-    }
-
+    /**
+     * Constructor for Config class.
+     * @param warningMessages the HashMap of Warnings to the warning messages.
+     */
     private Config(HashMap<Warning, String> warningMessages) {
-
+        this.warningMessages = warningMessages;
     }
 
+    /**
+     * Get the static Config instance of this session, or make one if there
+     * isn't one already.
+     * @return the Config instance.
+     */
     public static Config getInstance() {
-        return null;
+        if (config == null) {
+            config = new Config(DataLoader.loadConfigData());
+        }
+        return config;
     }
 
     public boolean hasWarning(Warning warning) {

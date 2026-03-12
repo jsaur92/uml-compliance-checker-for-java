@@ -5,6 +5,11 @@ import org.json.simple.JSONObject;
 import java.io.FileWriter;
 
 public class DataWriter extends DataConstants {
+    /**
+     * Write the User data to the user.json file.
+     * @param user the User to save.
+     * @return true if the method ends successfully.
+     */
     public static boolean saveUser(User user) {
         JSONObject userJson = new JSONObject();
         userJson.put(USER_TYPE, user.getUserType());

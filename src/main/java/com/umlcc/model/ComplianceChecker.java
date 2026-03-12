@@ -6,12 +6,23 @@ public class ComplianceChecker {
     private static ComplianceChecker complianceChecker;
     private Directory umlData;
 
+    /**
+     * Constructor for the ComplianceChecker class.
+     */
     private ComplianceChecker() {
 
     }
 
+    /**
+     * Get the static ComplianceChecker instance of this session, or make one
+     * if there isn't one already.
+     * @return the ComplianceChecker instance.
+     */
     public static ComplianceChecker getInstance() {
-        return null;
+        if (complianceChecker == null) {
+            complianceChecker = new ComplianceChecker();
+        }
+        return complianceChecker;
     }
 
     public boolean loadUmlDataByRepo(String rootname) {

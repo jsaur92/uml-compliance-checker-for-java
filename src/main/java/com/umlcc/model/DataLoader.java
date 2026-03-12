@@ -8,6 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class DataLoader extends DataConstants {
     public static Directory loadRepo(String rootname) {
@@ -18,6 +19,10 @@ public class DataLoader extends DataConstants {
         return null;
     }
 
+    /**
+     * Load the user data from the user.json file.
+     * @return the User object from the user.json file.
+     */
     public static User loadUser() throws FileNotFoundException {
         JSONParser parser = new JSONParser();
         User user;
@@ -29,12 +34,12 @@ public class DataLoader extends DataConstants {
             user = new User(type, lastUml, lastMyCode);
         } catch (Exception e) {
             user = new User(UserType.BASIC, "", "");
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return user;
     }
 
-    public static Config loadConfig() {
+    public static HashMap<Warning, String> loadConfigData() {
         return null;
     }
 }
