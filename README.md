@@ -1,2 +1,10 @@
-# uml-compliance-checker-for-java
+# UML Compliance Checker for Java
 A mix of an autograder and a style guide, this program allows you to compare two Java Projects to see if one has the same classes, methods, and variables as the other (i.e. if they would have the same UML class diagram). Rather than testing output of a program, this allows graders to see if the internal structure of two projects are identical.
+
+## Project Proposal
+
+What problems do educators face when grading assignments fairly, quickly, and consistently? What kind of software solutions in the form of applications or browser extensions could help with these problems? My long-term career goal is to be a computer science instructor at the university level. I currently hold a position as an undergraduate teaching assistant for CSCE 247 at UofSC and while grading, I often wonder if I am truly being fair to all of my students. This leads me to double and triple check students' work, cross-referencing their code with one another, ensuring that I am holding them to the same standards. I want to learn more about biases in grading, what other educators and software developers have done to try to fix the problem of bias, and I want to create a software solution to help myself and the education community increase the fairness and efficiency of grading. In my preliminary planning, I am considering developing an auto-grader that is suited for the needs of CSCE 247 and a browser extension for Blackboard that can provide a more effective anonymous grading experience than the settings in Blackboard allow by default. These tools will be centered around the work that I do as a teaching assistant but will be developed with a focus on scalability to other courses.
+
+## Acknowledgements
+
+This project was made under the guidance of instructor Portia Plante from the Molinaroli College of Engineering and Computing of the University of South Carolina and in association with the South Carolina Honors College. This project has been approved to fulfill the "Beyond the Classroom" Honors College requirement through SCHC 497 - Undergraduate Research.
