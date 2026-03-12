@@ -10,4 +10,16 @@ public class User {
         this.lastUmlDataPath = lastUmlDataPath;
         this.lastMyCodePath = lastMyCodePath;
     }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public String getLastUmlDataPath() {
+        return lastUmlDataPath;
+    }
+
+    public String getLastMyCodePath() {
+        return lastMyCodePath;
+    }
 }
