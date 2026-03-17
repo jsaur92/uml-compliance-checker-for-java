@@ -2,6 +2,10 @@ package com.umlcc.model;
 
 import java.util.HashMap;
 
+/**
+ * Singleton with data from the configuration file of this application.
+ * @author Joe Hardy
+ */
 public class Config {
     private static Config config;
     private HashMap<Warning, String> warningMessages;
