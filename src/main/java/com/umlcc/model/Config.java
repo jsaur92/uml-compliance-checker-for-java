@@ -26,19 +26,49 @@ public class Config {
         return config;
     }
 
+    /**
+     * Checks if the current configuration settings has a warning message for
+     * a given warning.
+     * @param warning the Warning to check for
+     * @return true if this warning is a key for warningMessages, else false.
+     */
     public boolean hasWarning(Warning warning) {
-        return false;
+        return warningMessages.containsKey(warning);
     }
 
+    /**
+     * Accessor method for a given warning message.
+     * @param warning the warning to get a message for.
+     * @return the message.
+     */
     public String getWarningMessage(Warning warning) {
-        return null;
+        return warningMessages.get(warning);
     }
 
+    /**
+     * Updates the message for a given warning if that warning is included in
+     * warningMessages already, otherwise add that warning and its message.
+     * @param warning the warning to set the message of.
+     * @param message the message to set.
+     * @return true if successful, false if the warningMessage with the given
+     * warning is already set to the given message.
+     */
     public boolean setWarningMessage(Warning warning, String message) {
-        return false;
+        if (warningMessages.containsKey(warning) && warningMessages.get(warning).equals(message))
+            return false;
+        warningMessages.put(warning, message);
+        return true;
     }
 
+    /**
+     * Removes a given warning from warningMessages.
+     * @param warning the warning to remove.
+     * @return true if successfully removed, false if the warning is already
+     * not included.
+     */
     public boolean removeWarningMessage(Warning warning) {
-        return false;
+        if (!hasWarning(warning)) return false;
+        warningMessages.remove(warning);
+        return true;
     }
 }
