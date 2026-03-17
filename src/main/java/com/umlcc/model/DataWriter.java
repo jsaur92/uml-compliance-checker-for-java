@@ -3,6 +3,7 @@ package com.umlcc.model;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
+import java.util.HashMap;
 
 public class DataWriter extends DataConstants {
     /**
@@ -25,7 +26,7 @@ public class DataWriter extends DataConstants {
         return true;
     }
 
-    public static boolean saveConfig(Config config) {
+    public static boolean saveConfigData(HashMap<Warning, String> warningMessages) {
         return false;
     }
 }
