@@ -41,6 +41,17 @@ public class User {
     }
 
     /**
+     * Mutator method for the user's type.
+     * @param userType the UserType to change to.
+     * @return true if the usertype has changed, false otherwise.
+     */
+    public boolean setUserType(UserType userType) {
+        boolean changed = userType != this.userType;
+        this.userType = userType;
+        return changed;
+    }
+
+    /**
      * Accessor method for the user's last UML Data filepath.
      * @return the user's last UML Data filepath.
      */

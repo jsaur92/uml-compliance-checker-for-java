@@ -25,23 +25,6 @@ public class UserFile {
     }
 
     /**
-     * Constructor for a UserFile representing a .java file.
-     * @param name the name of this file.
-     * @param classes the classes of this file. typically just a single class.
-     * @param modRule the modification rule of this file.
-     * @param content all of the lines of this file represented as a String.
-     */
-    public UserFile(String name, ArrayList<JavaClass> classes, ModificationRule modRule, String content) {
-        this.name = name;
-        this.classes = new HashMap<String, JavaClass>();
-        for (JavaClass jclass : classes) {
-            this.classes.put(jclass.getName(), jclass);
-        }
-        this.modRule = modRule;
-        this.content = content;
-    }
-
-    /**
      * Accessor method for name.
      * @return this file's name.
      */
@@ -72,7 +55,12 @@ public class UserFile {
      * @return the list of EvaluationResults resulting from this compliance check.
      */
     public ArrayList<EvaluationResult> checkCompliance() {
-        return null;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+
+        for (JavaClass jclass : classes.values())
+            results.addAll(jclass.checkCompliance());
+
+        return results;
     }
 
     /**
@@ -82,6 +70,11 @@ public class UserFile {
      * @return the list of EvaluationResults resulting from this compliance check.
      */
     public ArrayList<EvaluationResult> checkCompliance(UserFile other) {
-        return null;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+
+        for (String jclassName : classes.keySet())
+            results.addAll(getClass(jclassName).checkCompliance(other.getClass(jclassName)));
+
+        return results;
     }
 }
