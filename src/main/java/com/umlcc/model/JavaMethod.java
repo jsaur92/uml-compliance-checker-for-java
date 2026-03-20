@@ -34,12 +34,58 @@ public class JavaMethod extends JavaThing {
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance() {
-        return null;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+
+        if (config.hasWarning(Warning.NO_JAVADOC_METHOD)) {
+            if (!hasJavaDoc()) results.add(
+                    new EvaluationResult(Warning.NO_JAVADOC_METHOD, this)
+            );
+        }
+        else {
+            if (config.hasWarning(Warning.NO_JAVADOC_PARAMETER)) {
+                //this checks to see if it has @param at all, but it should check to see if there is @param for every parameter.
+                if (!parameters.isEmpty() && getJavaDoc().getBlockTags().contains("@param")) results.add(
+                        new EvaluationResult(Warning.NO_JAVADOC_PARAMETER, this)
+                );
+            }
+
+            if (config.hasWarning(Warning.NO_JAVADOC_RETURN)) {
+                if (!returnType.equals("void") && getJavaDoc().getBlockTags().contains("@return")) results.add(
+                        new EvaluationResult(Warning.NO_JAVADOC_RETURN, this)
+                );
+            }
+        }
+
+        return results;
     }
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance(JavaThing other) {
-        return null;
+        JavaMethod otherMethod = (JavaMethod) other;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
+
+        if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
+            for (String parName : getParameters().keySet()) {
+                if (!otherMethod.hasParameter(parName)) results.add(
+                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                );
+            }
+
+            for (String parName : otherMethod.getParameters().keySet()) {
+                if (!hasParameter(parName)) results.add(
+                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                );
+            }
+        }
+
+        // this actually checks all modifiers right now, so it should be tuned to be more specific in the future.
+        if (config.hasWarning(Warning.INCORRECT_PRIVACY_METHOD)) {
+            if (!modifiers.equals(otherMethod.getModifiers())) results.add(
+                    new EvaluationResult(Warning.INCORRECT_PRIVACY_METHOD, this, other)
+            );
+        }
+
+        return results;
     }
 
     @Override
@@ -50,6 +96,15 @@ public class JavaMethod extends JavaThing {
         if (!returnType.equals(otherMethod.getReturnType())) return false;
         // should the content have to be equal for the methods to be equal?
         return true;
+    }
+
+    /**
+     * Checks to see if a parameter of a given name exists in parameters.
+     * @param parameterName the name of the parameter
+     * @return true if the parameter is in parameters, false otherwise.
+     */
+    public boolean hasParameter(String parameterName) {
+        return parameters.containsKey(parameterName);
     }
 
     /**

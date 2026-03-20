@@ -38,12 +38,67 @@ public class JavaClass extends JavaThing {
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance() {
-        return null;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+
+        if (config.hasWarning(Warning.NO_JAVADOC_CLASS)) {
+            if (!hasJavaDoc()) results.add(
+                    new EvaluationResult(Warning.NO_JAVADOC_CLASS, this)
+            );
+        }
+        else if (config.hasWarning(Warning.NO_JAVADOC_AUTHOR)) {
+            if (getJavaDoc().getBlockTags().contains("@author")) results.add(
+                    new EvaluationResult(Warning.NO_JAVADOC_AUTHOR, this)
+            );
+        }
+
+        for (JavaVariable var : variables.values())
+            results.addAll(var.checkCompliance());
+        for (JavaMethod method : methods.values())
+            results.addAll(method.checkCompliance());
+
+        return results;
     }
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance(JavaThing other) {
-        return null;
+        JavaClass otherClass = (JavaClass) other;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
+
+        if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
+            for (String varName : otherClass.getVariables().keySet()) {
+                if (!hasVariable(varName)) results.add(
+                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                );
+            }
+            for (String methodName : otherClass.getMethods().keySet()) {
+                if (!hasMethod(methodName)) results.add(
+                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                );
+            }
+        }
+
+        if (config.hasWarning(Warning.EXTRA_CLASS_ATTRIBUTE)) {
+            for (String varName : variables.keySet()) {
+                if (!otherClass.hasVariable(varName)) results.add(
+                        new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
+                );
+            }
+        }
+
+        if (config.hasWarning(Warning.EXTRA_NON_PRIVATE_METHOD)) {
+            for (String methodName : methods.keySet()) {
+                if (!otherClass.hasMethod(methodName)) results.add(
+                        new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
+                );
+            }
+        }
+
+        for (String varName : variables.keySet())
+            results.addAll(getVariable(varName).checkCompliance(otherClass.getVariable(varName)));
+        for (String methodName : methods.keySet())
+            results.addAll(getMethod(methodName).checkCompliance(otherClass.getMethod(methodName)));
+
+        return results;
     }
 
     @Override
@@ -70,6 +125,24 @@ public class JavaClass extends JavaThing {
      */
     public HashMap<String, JavaMethod> getMethods() {
         return methods;
+    }
+
+    /**
+     * Checks if this class has a variable of a given name.
+     * @param name the name of the variable to search for.
+     * @return true if this class has the given variable, false otherwise.
+     */
+    public boolean hasVariable(String name) {
+        return variables.containsKey(name);
+    }
+
+    /**
+     * Checks if this class has a method of a given name/
+     * @param name the name of the method to search for.
+     * @return true if this class has the given method, false otherwise.
+     */
+    public boolean hasMethod(String name) {
+        return methods.containsKey(name);
     }
 
     /**

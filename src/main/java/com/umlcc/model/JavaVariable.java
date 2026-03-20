@@ -25,12 +25,29 @@ public class JavaVariable extends JavaThing {
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance() {
-        return null;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+
+        return results;
     }
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance(JavaThing other) {
-        return null;
+        JavaVariable otherVar = (JavaVariable) other;
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
+
+        // this actually checks all modifiers right now, so it should be tuned to be more specific in the future.
+        if (config.hasWarning(Warning.INCORRECT_PRIVACY_METHOD)) {
+            if (!modifiers.equals(otherVar.getModifiers())) results.add(
+                    new EvaluationResult(Warning.INCORRECT_PRIVACY_METHOD, this, other)
+            );
+        }
+
+        if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
+            if (!type.equals(otherVar.getType())) results.add(
+                    new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+            );
+        }
+        return results;
     }
 
     @Override

@@ -7,10 +7,10 @@ import java.util.ArrayList;
  * @author Joe Hardy
  */
 public abstract class JavaThing {
-    private String name;
-    private ArrayList<Modifier> modifiers;
-    private String comment;
-    private Config config;
+    protected String name;
+    protected ArrayList<Modifier> modifiers;
+    protected String comment;
+    protected Config config;
 
     /**
      * Constructor for the JavaThing class.
@@ -57,6 +57,15 @@ public abstract class JavaThing {
      */
     public boolean hasJavaDoc() {
         return comment != null && JavaDoc.isJavaDoc(comment);
+    }
+
+    /**
+     * Get a JavaDoc object made from this thing's comment.
+     * @return the Javadoc in the form of a JavaDoc object.
+     */
+    public JavaDoc getJavaDoc() {
+        if (!hasJavaDoc()) return null;
+        return new JavaDoc(comment);
     }
 
     /**

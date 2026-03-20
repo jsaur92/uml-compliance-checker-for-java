@@ -18,6 +18,10 @@ public class JavaDoc {
         return null;
     }
 
+    public ArrayList<String> getBlockTags() {
+        return blockTags;
+    }
+
     public ArrayList<EvaluationResult> checkCompliance(JavaThing thing) {
         return null;
     }
