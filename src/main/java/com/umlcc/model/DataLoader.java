@@ -41,8 +41,74 @@ public class DataLoader extends DataConstants {
         return dir;
     }
 
+    /**
+     * Load a Directory containing all the data from a .umlcc file.
+     * @param pathname path to the .umlcc file.
+     * @return the Directory.
+     */
     public static Directory loadUmlcc(String pathname) {
         return null;
+    }
+
+    private Directory loadDirFromUmlcc(String dirText) {
+        return null;
+    }
+
+    private UserFile loadFileFromUmlcc(String fileText) {
+        String[] lines = fileText.split("\n");
+
+        return null;
+    }
+
+    private JavaClass loadClassFromUmlcc(String[] lines) {
+        String classLine = lines[0].replaceAll("\t", "");
+        String[] parts = classLine.split(" ");
+        String name = parts[parts.length-1];
+        ArrayList<Modifier> mods = new ArrayList<Modifier>();
+        for (int i = 0; i < parts.length-2; i++) {
+            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
+        }
+        boolean is_interface = parts[parts.length-2].equals("interface");
+
+        ArrayList<JavaVariable> vars = new ArrayList<JavaVariable>();
+        ArrayList<JavaMethod> methods = new ArrayList<JavaMethod>();
+        for (int i = 1; i < lines.length; i++) {
+            if (lines[i].charAt(lines[i].length()-1) == ')')
+                methods.add(loadMethodFromUmlcc(lines[i]));
+            else
+                vars.add(loadVarFromUmlcc(lines[i]));
+        }
+        return new JavaClass(name, mods, "", vars, methods, is_interface);
+    }
+
+    private JavaMethod loadMethodFromUmlcc(String line) {
+        int paramStart = line.indexOf('(');
+        String partsFull = line.substring(0, paramStart);
+        String[] parts = partsFull.split(" ");
+        String name = parts[parts.length-1];
+        String type = parts[parts.length-2];
+        ArrayList<Modifier> mods = new ArrayList<Modifier>();
+        for (int i = 0; i < parts.length-2; i++) {
+            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
+        }
+
+        String paramsFull = line.substring(paramStart, line.length()-1);
+        String[] params = paramsFull.split(", ");
+        ArrayList<JavaVariable> p = new ArrayList<JavaVariable>();
+        for (String s : params) p.add(loadVarFromUmlcc(s));
+
+        return new JavaMethod(name, mods, "", p, type, "");
+    }
+
+    private JavaVariable loadVarFromUmlcc(String line) {
+        String[] parts = line.split(" ");
+        String name = parts[parts.length-1];
+        String type = parts[parts.length-2];
+        ArrayList<Modifier> mods = new ArrayList<Modifier>();
+        for (int i = 0; i < parts.length-2; i++) {
+            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
+        }
+        return new JavaVariable(name, mods, "", type);
     }
 
     /**
