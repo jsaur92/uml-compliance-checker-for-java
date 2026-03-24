@@ -25,6 +25,20 @@ public class UserFile {
     }
 
     /**
+     * Constructor for a UserFile representing a JavaFile.
+     * @param name
+     * @param classes
+     * @param modRule
+     * @param content
+     */
+    public UserFile(String name, HashMap<String, JavaClass> classes, ModificationRule modRule, String content) {
+        this.name = name;
+        this.classes = classes;
+        this.modRule = modRule;
+        this.content = content;
+    }
+
+    /**
      * Accessor method for name.
      * @return this file's name.
      */

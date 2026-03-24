@@ -1,17 +1,10 @@
 package com.umlcc.model;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -54,33 +47,79 @@ public class DataLoader extends DataConstants {
      * @return the Directory.
      */
     public static Directory loadUmlcc(String pathname) {
-        return null;
-    }
-
-    private Directory loadDirFromUmlcc(String dirText) {
-        return null;
-    }
-
-    private UserFile loadFileFromUmlcc(String fileText) {
-        String[] lines = fileText.split("\n");
-
-        return null;
-    }
-
-    private JavaClass loadClassFromUmlcc(String[] lines) {
-        String classLine = lines[0].replaceAll("\t", "");
-        String[] parts = classLine.split(" ");
-        String name = parts[parts.length-1];
-        ArrayList<Modifier> mods = new ArrayList<Modifier>();
-        for (int i = 0; i < parts.length-2; i++) {
-            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
+        File umlccFile = new File(UMLCC_DIR_PATH + pathname);
+        String dirText = "";
+        try {
+            Scanner scanner = new Scanner(umlccFile);
+            while (scanner.hasNext()) {
+                dirText += scanner.next();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        boolean is_interface = parts[parts.length-2].equals("interface");
+        return loadDirFromUmlcc(dirText);
+    }
+
+    private static Directory loadDirFromUmlcc(String dirText) {
+        String[] lines = dirText.split(DELIMITER_NEWLINE);
+        String dirName = removeWhitespace(lines[0].split(DELIMITER_FILE_START)[0]);
+        ArrayList<UserFile> files = new ArrayList<UserFile>();
+        ArrayList<Directory> subdirs = new ArrayList<Directory>();
+        String thisFileText = "";
+        int baseTabs = countTabs(lines[0]);
+        boolean isSubdir = false;
+        for (int i = 1; i < lines.length; i++) {
+            thisFileText += lines[i];
+            if (lines[i].contains(DELIMITER_FILE_START)) {
+                isSubdir = !lines[i].contains(DELIMITER_DOT);
+            }
+            else if (lines[i].contains(DELIMITER_FILE_END)) {
+                if (isSubdir) {
+                    Directory newDir = loadDirFromUmlcc(thisFileText);
+                    subdirs.add(newDir);
+                }
+                else {
+                    UserFile newFile = loadFileFromUmlcc(thisFileText);
+                    files.add(newFile);
+                }
+                thisFileText = "";
+            }
+        }
+        return new Directory(dirName, files, subdirs);
+    }
+
+    private static UserFile loadFileFromUmlcc(String fileText) {
+        String[] lines = fileText.split(DELIMITER_NEWLINE);
+        String fileName = removeWhitespace(lines[0].split(DELIMITER_FILE_START)[0]);
+        HashMap<String, JavaClass> classes = new HashMap<String, JavaClass>();
+        String thisClassText = "";
+        int baseTabs = countTabs(lines[0]);
+        for (int i = 1; i < lines.length; i++) {
+            if (countTabs(lines[i]) > baseTabs) {
+                thisClassText += lines[i];
+            }
+            else {
+                JavaClass newClass = loadClassFromUmlcc(thisClassText);
+                classes.put(newClass.getName(), newClass);
+                thisClassText = "";
+            }
+        }
+        if (classes.isEmpty())  return new UserFile(fileName, "");
+        return new UserFile(fileName, classes, ModificationRule.DONT_CARE, "");
+    }
+
+    private static JavaClass loadClassFromUmlcc(String classText) {
+        String[] lines = classText.split(DELIMITER_NEWLINE);
+        String classLine = lines[0].replaceAll(DELIMITER_TAB, "");
+        String[] parts = classLine.split(DELIMITER_SPACE);
+        String name = parts[parts.length-1];
+        ArrayList<Modifier> mods = parseMods(parts);
+        boolean is_interface = parts[parts.length-2].equals(INTERFACE_DESIGNATION);
 
         ArrayList<JavaVariable> vars = new ArrayList<JavaVariable>();
         ArrayList<JavaMethod> methods = new ArrayList<JavaMethod>();
         for (int i = 1; i < lines.length; i++) {
-            if (lines[i].charAt(lines[i].length()-1) == ')')
+            if (lines[i].endsWith(DELIMITER_METHOD_END))
                 methods.add(loadMethodFromUmlcc(lines[i]));
             else
                 vars.add(loadVarFromUmlcc(lines[i]));
@@ -88,16 +127,13 @@ public class DataLoader extends DataConstants {
         return new JavaClass(name, mods, "", vars, methods, is_interface);
     }
 
-    private JavaMethod loadMethodFromUmlcc(String line) {
-        int paramStart = line.indexOf('(');
+    private static JavaMethod loadMethodFromUmlcc(String line) {
+        int paramStart = line.indexOf(DELIMITER_METHOD_START);
         String partsFull = line.substring(0, paramStart);
-        String[] parts = partsFull.split(" ");
+        String[] parts = partsFull.split(DELIMITER_SPACE);
         String name = parts[parts.length-1];
         String type = parts[parts.length-2];
-        ArrayList<Modifier> mods = new ArrayList<Modifier>();
-        for (int i = 0; i < parts.length-2; i++) {
-            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
-        }
+        ArrayList<Modifier> mods = parseMods(parts);
 
         String paramsFull = line.substring(paramStart, line.length()-1);
         String[] params = paramsFull.split(", ");
@@ -107,15 +143,20 @@ public class DataLoader extends DataConstants {
         return new JavaMethod(name, mods, "", p, type, "");
     }
 
-    private JavaVariable loadVarFromUmlcc(String line) {
-        String[] parts = line.split(" ");
+    private static JavaVariable loadVarFromUmlcc(String line) {
+        String[] parts = line.split(DELIMITER_SPACE);
         String name = parts[parts.length-1];
         String type = parts[parts.length-2];
+        ArrayList<Modifier> mods = parseMods(parts);
+        return new JavaVariable(name, mods, "", type);
+    }
+
+    private static ArrayList<Modifier> parseMods(String[] parts) {
         ArrayList<Modifier> mods = new ArrayList<Modifier>();
         for (int i = 0; i < parts.length-2; i++) {
             mods.add(Modifier.valueOf(parts[i].toUpperCase()));
         }
-        return new JavaVariable(name, mods, "", type);
+        return mods;
     }
 
     /**
