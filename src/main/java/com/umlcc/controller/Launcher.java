@@ -1,4 +1,4 @@
-package com.umlcc.umlcc;
+package com.umlcc.controller;
 
 import javafx.application.Application;
 
