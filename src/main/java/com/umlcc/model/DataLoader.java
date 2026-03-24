@@ -9,8 +9,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  * Static class for loading in JSON data and Java project repositories.
@@ -29,8 +33,11 @@ public class DataLoader extends DataConstants {
                     dirs.add( loadRepo(f.getPath()));
                 }
                 else {
-                    FileReader contentReader = new FileReader(f);
-                    String content = contentReader.readAllAsString();
+                    String content = "";
+                    Scanner fileScanner = new Scanner(f);
+                    while (fileScanner.hasNext()) {
+                        content += fileScanner.next();
+                    }
                     files.add(new UserFile(f.getName(), content));
                 }
             }

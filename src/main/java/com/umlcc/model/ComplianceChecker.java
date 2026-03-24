@@ -40,7 +40,6 @@ public class ComplianceChecker {
         File umlcc = new File(pathname);
         try {
             FileReader uReader = new FileReader(umlcc);
-            String allLines = uReader.readAllAsString();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
