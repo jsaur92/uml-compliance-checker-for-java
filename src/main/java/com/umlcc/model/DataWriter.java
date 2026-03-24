@@ -1,5 +1,6 @@
 package com.umlcc.model;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
@@ -21,12 +22,35 @@ public class DataWriter extends DataConstants {
             writer.write(userJson.toString());
             writer.close();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
 
+    /**
+     * Write the Config data to the config.json file.
+     * @param warningMessages the warning messages of the Config to save.
+     * @return true if the method ends successfully.
+     */
     public static boolean saveConfigData(HashMap<Warning, String> warningMessages) {
-        return false;
+        JSONObject configJson = new JSONObject();
+        JSONArray wmsArray= new JSONArray();
+        for (Warning key : warningMessages.keySet()) {
+            JSONObject wm = new JSONObject();
+            wm.put(CONFIG_WARNINGS_WARNING, key);
+            wm.put(CONFIG_WARNINGS_MESSAGE, warningMessages.get(key));
+            wmsArray.add(wm);
+        }
+        configJson.put(CONFIG_WARNINGS, wmsArray);
+        try {
+            FileWriter writer = new FileWriter(USER_FILE_NAME);
+            writer.write(configJson.toString());
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

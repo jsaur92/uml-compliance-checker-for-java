@@ -5,13 +5,17 @@ package com.umlcc.model;
  * @author Joe Hardy
  */
 public abstract class DataConstants {
-    protected final static String USER_FILE_NAME = "json/user.json";
+    protected final static String JSON_DIR_PATH = "json/";
+    protected final static String USER_FILE_NAME = "user.json";
     protected final static String USER_TYPE = "userType";
     protected final static String USER_LAST_UML = "lastUmlDataPath";
     protected final static String USER_LAST_MY_CODE = "lastMyCodePath";
+    protected final static String CONFIG_FILE_NAME = "config.json";
+    protected final static String CONFIG_WARNINGS = "warnings";
+    protected final static String CONFIG_WARNINGS_WARNING = "warning";
+    protected final static String CONFIG_WARNINGS_MESSAGE = "message";
 
     protected final static String UMLCC_DIR_PATH = "umlcc/";
-
     protected final static String DELIMITER_FILE_START = "{";
     protected final static String DELIMITER_FILE_END = "}";
     protected final static String DELIMITER_METHOD_START = "(";
@@ -20,7 +24,6 @@ public abstract class DataConstants {
     protected final static String DELIMITER_NEWLINE = "\n";
     protected final static String DELIMITER_SPACE = " ";
     protected final static String DELIMITER_DOT = ".";
-
     protected final static String INTERFACE_DESIGNATION = "interface";
 
     /**

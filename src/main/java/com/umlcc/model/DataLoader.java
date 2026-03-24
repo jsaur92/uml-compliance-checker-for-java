@@ -1,5 +1,6 @@
 package com.umlcc.model;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -14,6 +15,11 @@ import java.util.Scanner;
  * @author Joe Hardy
  */
 public class DataLoader extends DataConstants {
+    /**
+     * Load a Directory containing all the data from a real Java project repository.
+     * @param rootname the root of the file
+     * @return the Directory.
+     */
     public static Directory loadRepo(String rootname) {
         Directory dir;
         try {
@@ -167,7 +173,7 @@ public class DataLoader extends DataConstants {
         JSONParser parser = new JSONParser();
         User user;
         try {
-            JSONObject userJson = (JSONObject) parser.parse(new FileReader(USER_FILE_NAME));
+            JSONObject userJson = (JSONObject) parser.parse(new FileReader( USER_FILE_NAME));
             UserType type = (UserType) userJson.get(USER_TYPE);
             String lastUml = (String) userJson.get(USER_LAST_UML);
             String lastMyCode = (String) userJson.get(USER_LAST_MY_CODE);
@@ -179,7 +185,24 @@ public class DataLoader extends DataConstants {
         return user;
     }
 
+    /**
+     * Load the config data from the config.json file.
+     * @return the HashMap with warningMessage data for Config.
+     */
     public static HashMap<Warning, String> loadConfigData() {
-        return null;
+        JSONParser parser = new JSONParser();
+        HashMap<Warning, String> warningMessages = new HashMap<Warning, String>();
+        try {
+            JSONObject configJson = (JSONObject) parser.parse(new FileReader(CONFIG_FILE_NAME));
+            JSONArray wmArray = (JSONArray) configJson.get(CONFIG_WARNINGS);
+            for (Object obj : wmArray) {
+                JSONObject wm = (JSONObject) obj;
+                warningMessages.put( (Warning) wm.get(CONFIG_WARNINGS_WARNING),
+                                     (String) wm.get(CONFIG_WARNINGS_MESSAGE) );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return warningMessages;
     }
 }
