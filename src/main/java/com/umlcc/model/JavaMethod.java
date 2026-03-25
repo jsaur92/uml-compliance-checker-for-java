@@ -139,4 +139,17 @@ public class JavaMethod extends JavaThing {
     public String getContent() {
         return content;
     }
+
+//    @Override
+//    public String toString() {
+//        String s = "";
+//        for (Modifier mod : getModifiers()) s += mod + " ";
+//        s += getReturnType() + " " + getName() + "(";
+//        for (JavaVariable var : getParameters().values()) {
+//            s += var + ", ";
+//        }
+//        if (s.endsWith(", ")) s = s.substring(0, s.length()-2);
+//        s += ")";
+//        return s;
+//    }
 }

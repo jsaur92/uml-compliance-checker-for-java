@@ -186,4 +186,19 @@ public class JavaClass extends JavaThing {
     public boolean isInterface() {
         return false;
     }
+
+    @Override
+    public String toString() {
+        String header = getName();
+        String body = "";
+        for (JavaVariable var : getVariables().values()) {
+            body += "\n" + var;
+        }
+        for (JavaMethod method : getMethods().values()) {
+            body += "\n" + method;
+        }
+        body = body.replaceAll("\n", "\n\t");   //indent the body
+
+        return header + body;
+    }
 }

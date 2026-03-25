@@ -26,8 +26,8 @@ public class ComplianceCheckerApplication {
      * there isn't one already.
      * @return the ComplianceCheckerApplication instance.
      */
-    public ComplianceCheckerApplication getInstance() {
-        if (complianceChecker == null) application = new ComplianceCheckerApplication();
+    public static ComplianceCheckerApplication getInstance() {
+        if (application == null) application = new ComplianceCheckerApplication();
         return application;
     }
 
@@ -69,12 +69,22 @@ public class ComplianceCheckerApplication {
         return false;
     }
 
-    public boolean loadUmlDataByRepo(String rootname) {
-        return false;
+    /**
+     * Load a Directory containing all the data from a real Java project repository.
+     * @param rootname the root of the file
+     * @return the Directory.
+     */
+    public Directory loadUmlDataByRepo(String rootname) {
+        return DataLoader.loadRepo(rootname);
     }
 
-    public boolean loadUmlDataByUmlcc(String pathname) {
-        return false;
+    /**
+     * Load a Directory containing all the data from a .umlcc file.
+     * @param pathname path to the .umlcc file.
+     * @return the Directory.
+     */
+    public Directory loadUmlDataByUmlcc(String pathname) {
+        return DataLoader.loadUmlcc(pathname);
     }
 
     public ArrayList<String> checkCompliance(String rootname) {

@@ -91,4 +91,15 @@ public class UserFile {
 
         return results;
     }
+
+    @Override
+    public String toString() {
+        String s = getName() + " {";
+        if (classes != null) {
+            for (String key : classes.keySet()) {
+                s += "\n" + classes.get(key);
+            }
+        }
+        return s + "\n}";
+    }
 }

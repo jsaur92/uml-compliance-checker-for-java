@@ -73,4 +73,48 @@ public class Directory {
     public Directory getSubdir(String name) {
         return subdirs.get(name);
     }
+
+    /**
+     * Accessor method for files.
+     * @return the files HashMap.
+     */
+    public HashMap<String, UserFile> getFiles() {
+        return files;
+    }
+
+    /**
+     * Mutator method for files.
+     * @param files the given files HashMap.
+     */
+    public void setFiles(HashMap<String, UserFile> files) {
+        this.files = files;
+    }
+
+    /**
+     * Accessor method for subdirs.
+     * @return the subdirs HashMap.
+     */
+    public HashMap<String, Directory> getSubdirs() {
+        return subdirs;
+    }
+
+    /**
+     * Mutator method for subdirs.
+     * @param subdirs the given subdirs HashMap.
+     */
+    public void setSubdirs(HashMap<String, Directory> subdirs) {
+        this.subdirs = subdirs;
+    }
+
+    @Override
+    public String toString() {
+        String s = getName();
+        for (String key : subdirs.keySet()) {
+            s += "\n" + subdirs.get(key);
+        }
+        for (String key : files.keySet()) {
+            s += "\n" + files.get(key);
+        }
+        return s;
+    }
 }

@@ -65,4 +65,12 @@ public class JavaVariable extends JavaThing {
     public String getType() {
         return type;
     }
+
+//    @Override
+//    public String toString() {
+//        String s = "";
+//        for (Modifier mod : getModifiers()) s += mod + " ";
+//        s += getType() + " " + getName();
+//        return s;
+//    }
 }

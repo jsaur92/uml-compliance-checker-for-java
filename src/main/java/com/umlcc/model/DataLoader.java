@@ -58,7 +58,7 @@ public class DataLoader extends DataConstants {
         try {
             Scanner scanner = new Scanner(umlccFile);
             while (scanner.hasNext()) {
-                dirText += scanner.next();
+                dirText += scanner.nextLine() + DELIMITER_NEWLINE;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,18 +68,22 @@ public class DataLoader extends DataConstants {
 
     private static Directory loadDirFromUmlcc(String dirText) {
         String[] lines = dirText.split(DELIMITER_NEWLINE);
-        String dirName = removeWhitespace(lines[0].split(DELIMITER_FILE_START)[0]);
+        String dirName = removeWhitespace(lines[0].split(REGEX_FILE_START)[0]);
         ArrayList<UserFile> files = new ArrayList<UserFile>();
         ArrayList<Directory> subdirs = new ArrayList<Directory>();
         String thisFileText = "";
         int baseTabs = countTabs(lines[0]);
         boolean isSubdir = false;
+        boolean open = false;   // true when a file is opened, false when it is closed. prevents catching sequential "{"s as their own files.
         for (int i = 1; i < lines.length; i++) {
-            thisFileText += lines[i];
+            thisFileText += lines[i] + "\n";
             if (lines[i].contains(DELIMITER_FILE_START)) {
+                open = true;
+                thisFileText = lines[i] + "\n";
                 isSubdir = !lines[i].contains(DELIMITER_DOT);
             }
-            else if (lines[i].contains(DELIMITER_FILE_END)) {
+            else if (lines[i].contains(DELIMITER_FILE_END) && open) {
+                open = false;
                 if (isSubdir) {
                     Directory newDir = loadDirFromUmlcc(thisFileText);
                     subdirs.add(newDir);
@@ -96,13 +100,13 @@ public class DataLoader extends DataConstants {
 
     private static UserFile loadFileFromUmlcc(String fileText) {
         String[] lines = fileText.split(DELIMITER_NEWLINE);
-        String fileName = removeWhitespace(lines[0].split(DELIMITER_FILE_START)[0]);
+        String fileName = removeWhitespace(lines[0].split(REGEX_FILE_START)[0]);
         HashMap<String, JavaClass> classes = new HashMap<String, JavaClass>();
         String thisClassText = "";
         int baseTabs = countTabs(lines[0]);
         for (int i = 1; i < lines.length; i++) {
-            if (countTabs(lines[i]) > baseTabs) {
-                thisClassText += lines[i];
+            if (countTabs(lines[i]) > baseTabs || thisClassText.equals("")) {
+                thisClassText += lines[i] + "\n";
             }
             else {
                 JavaClass newClass = loadClassFromUmlcc(thisClassText);
@@ -118,9 +122,21 @@ public class DataLoader extends DataConstants {
         String[] lines = classText.split(DELIMITER_NEWLINE);
         String classLine = lines[0].replaceAll(DELIMITER_TAB, "");
         String[] parts = classLine.split(DELIMITER_SPACE);
-        String name = parts[parts.length-1];
+        boolean is_interface = false;
+        String name = "";
+        for (int i = 0; i < parts.length; i++) {     // iterate to find where it says 'class' or 'interface'.
+            if (parts[i].equals(CLASS_DESIGNATION)) {
+                is_interface = false;
+                name = parts[i+1];
+                break;
+            }
+            else if (parts[i].equals(INTERFACE_DESIGNATION)) {
+                is_interface = true;
+                name = parts[i+1];
+                break;
+            }
+        }
         ArrayList<Modifier> mods = parseMods(parts);
-        boolean is_interface = parts[parts.length-2].equals(INTERFACE_DESIGNATION);
 
         ArrayList<JavaVariable> vars = new ArrayList<JavaVariable>();
         ArrayList<JavaMethod> methods = new ArrayList<JavaMethod>();
@@ -141,10 +157,14 @@ public class DataLoader extends DataConstants {
         String type = parts[parts.length-2];
         ArrayList<Modifier> mods = parseMods(parts);
 
-        String paramsFull = line.substring(paramStart, line.length()-1);
+        String paramsFull = line.substring(paramStart+1, line.length()-1);
         String[] params = paramsFull.split(", ");
         ArrayList<JavaVariable> p = new ArrayList<JavaVariable>();
-        for (String s : params) p.add(loadVarFromUmlcc(s));
+        for (String s : params) {
+            if (s.split(" ").length > 1) {
+                p.add(loadVarFromUmlcc(s));
+            }
+        }
 
         return new JavaMethod(name, mods, "", p, type, "");
     }
@@ -160,7 +180,9 @@ public class DataLoader extends DataConstants {
     private static ArrayList<Modifier> parseMods(String[] parts) {
         ArrayList<Modifier> mods = new ArrayList<Modifier>();
         for (int i = 0; i < parts.length-2; i++) {
-            mods.add(Modifier.valueOf(parts[i].toUpperCase()));
+            if (Modifier.hasValue(parts[i])) {
+                mods.add(Modifier.fromString(parts[i]));
+            }
         }
         return mods;
     }
@@ -173,7 +195,7 @@ public class DataLoader extends DataConstants {
         JSONParser parser = new JSONParser();
         User user;
         try {
-            JSONObject userJson = (JSONObject) parser.parse(new FileReader( USER_FILE_NAME));
+            JSONObject userJson = (JSONObject) parser.parse(new FileReader(JSON_DIR_PATH + USER_FILE_NAME));
             UserType type = (UserType) userJson.get(USER_TYPE);
             String lastUml = (String) userJson.get(USER_LAST_UML);
             String lastMyCode = (String) userJson.get(USER_LAST_MY_CODE);
@@ -193,16 +215,14 @@ public class DataLoader extends DataConstants {
         JSONParser parser = new JSONParser();
         HashMap<Warning, String> warningMessages = new HashMap<Warning, String>();
         try {
-            JSONObject configJson = (JSONObject) parser.parse(new FileReader(CONFIG_FILE_NAME));
+            JSONObject configJson = (JSONObject) parser.parse(new FileReader(JSON_DIR_PATH + CONFIG_FILE_NAME));
             JSONArray wmArray = (JSONArray) configJson.get(CONFIG_WARNINGS);
             for (Object obj : wmArray) {
                 JSONObject wm = (JSONObject) obj;
                 warningMessages.put( (Warning) wm.get(CONFIG_WARNINGS_WARNING),
                                      (String) wm.get(CONFIG_WARNINGS_MESSAGE) );
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
         return warningMessages;
     }
 }
