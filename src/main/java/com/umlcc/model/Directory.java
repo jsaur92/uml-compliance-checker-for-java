@@ -9,25 +9,19 @@ import java.util.HashMap;
  */
 public class Directory {
     private String name;
-    private HashMap<String, UserFile> files;
-    private HashMap<String, Directory> subdirs;
+    private ArrayList<Directory> subdirs;
+    private ArrayList<UserFile> files;
 
     /**
      * Constructor for Directory class.
      * @param name the name of this directory.
-     * @param files all of the files in this directory.
      * @param subdirs all of this directory's subdirectories.
+     * @param files all of the files in this directory.
      */
-    public Directory(String name, ArrayList<UserFile> files, ArrayList<Directory> subdirs) {
+    public Directory(String name, ArrayList<Directory> subdirs, ArrayList<UserFile> files) {
         this.name = name;
-        this.files = new HashMap<String, UserFile>();
-        this.subdirs = new HashMap<String, Directory>();
-        for (UserFile file : files) {
-            this.files.put(file.getName(), file);
-        }
-        for (Directory dir : subdirs) {
-            this.subdirs.put(dir.getName(), dir);
-        }
+        this.subdirs = subdirs;
+        this.files = files;
     }
 
     /**
@@ -39,30 +33,27 @@ public class Directory {
     }
 
     /**
-     * Checks to see if a given file exists in this directory.
-     * @param name the name of the file to check for.
-     * @return true if files has that file, false otherwise.
-     */
-    public boolean hasFile(String name) {
-        return files.containsKey(name);
-    }
-
-    /**
      * Checks to see if a given subdirectory exists in this directory.
      * @param name the name of the subdirectory to check for.
      * @return true if subdirs has that directory, false otherwise.
      */
     public boolean hasSubdir(String name) {
-        return subdirs.containsKey(name);
+        for (Directory dir : subdirs) {
+            if (dir.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     /**
-     * Accesses a given file from files.
-     * @param name the file to get.
-     * @return the file with the given name.
+     * Checks to see if a given file exists in this directory.
+     * @param name the name of the file to check for.
+     * @return true if files has that file, false otherwise.
      */
-    public UserFile getFile(String name) {
-        return files.get(name);
+    public boolean hasFile(String name) {
+        for (UserFile file : files) {
+            if (file.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     /**
@@ -71,14 +62,29 @@ public class Directory {
      * @return the subdirectory with the given name.
      */
     public Directory getSubdir(String name) {
-        return subdirs.get(name);
+        for (Directory dir : subdirs) {
+            if (dir.getName().equals(name)) return dir;
+        }
+        return null;
+    }
+
+    /**
+     * Accesses a given file from files.
+     * @param name the file to get.
+     * @return the file with the given name.
+     */
+    public UserFile getFile(String name) {
+        for (UserFile file : files) {
+            if (file.getName().equals(name)) return file;
+        }
+        return null;
     }
 
     /**
      * Accessor method for files.
      * @return the files HashMap.
      */
-    public HashMap<String, UserFile> getFiles() {
+    public ArrayList<UserFile> getFiles() {
         return files;
     }
 
@@ -86,7 +92,7 @@ public class Directory {
      * Mutator method for files.
      * @param files the given files HashMap.
      */
-    public void setFiles(HashMap<String, UserFile> files) {
+    public void setFiles(ArrayList<UserFile> files) {
         this.files = files;
     }
 
@@ -94,7 +100,7 @@ public class Directory {
      * Accessor method for subdirs.
      * @return the subdirs HashMap.
      */
-    public HashMap<String, Directory> getSubdirs() {
+    public ArrayList<Directory> getSubdirs() {
         return subdirs;
     }
 
@@ -102,7 +108,7 @@ public class Directory {
      * Mutator method for subdirs.
      * @param subdirs the given subdirs HashMap.
      */
-    public void setSubdirs(HashMap<String, Directory> subdirs) {
+    public void setSubdirs(ArrayList<Directory> subdirs) {
         this.subdirs = subdirs;
     }
 
@@ -110,11 +116,11 @@ public class Directory {
     public String toString() {
         String header = getName() + " {";
         String body = "";
-        for (String key : subdirs.keySet()) {
-            body += "\n" + subdirs.get(key);
+        for (Directory dir : subdirs) {
+            body += "\n" + dir;
         }
-        for (String key : files.keySet()) {
-            body += "\n" + files.get(key);
+        for (UserFile file : files) {
+            body += "\n" + file;
         }
         body = body.replaceAll("\n", "\n\t");   //indent the body
         return header + body;

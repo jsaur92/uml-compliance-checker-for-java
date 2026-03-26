@@ -10,7 +10,7 @@ import java.util.HashMap;
  */
 public class UserFile {
     private String name;
-    private HashMap<String, JavaClass> classes;
+    private ArrayList<JavaClass> classes;
     private ModificationRule modRule;
     private String content;
 
@@ -31,7 +31,7 @@ public class UserFile {
      * @param modRule
      * @param content
      */
-    public UserFile(String name, HashMap<String, JavaClass> classes, ModificationRule modRule, String content) {
+    public UserFile(String name, ArrayList<JavaClass> classes, ModificationRule modRule, String content) {
         this.name = name;
         this.classes = classes;
         this.modRule = modRule;
@@ -48,11 +48,14 @@ public class UserFile {
 
     /**
      * Accesses a single class of a given name.
-     * @param name the name of the file to access.
-     * @return the file.
+     * @param name the name of the class to access.
+     * @return the class.
      */
     public JavaClass getClass(String name) {
-        return classes.get(name);
+        for (JavaClass javaClass : classes) {
+            if (javaClass.getName().equals(name)) return javaClass;
+        }
+        return null;
     }
 
     /**
@@ -71,7 +74,7 @@ public class UserFile {
     public ArrayList<EvaluationResult> checkCompliance() {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
 
-        for (JavaClass jclass : classes.values())
+        for (JavaClass jclass : classes)
             results.addAll(jclass.checkCompliance());
 
         return results;
@@ -86,8 +89,8 @@ public class UserFile {
     public ArrayList<EvaluationResult> checkCompliance(UserFile other) {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
 
-        for (String jclassName : classes.keySet())
-            results.addAll(getClass(jclassName).checkCompliance(other.getClass(jclassName)));
+        for (JavaClass jClass : classes)
+            results.addAll(jClass.checkCompliance(other.getClass(jClass.getName())));
 
         return results;
     }
@@ -96,8 +99,8 @@ public class UserFile {
     public String toString() {
         String s = getName() + " {";
         if (classes != null) {
-            for (String key : classes.keySet()) {
-                s += "\n" + classes.get(key);
+            for (JavaClass jClass : classes) {
+                s += "\n" + jClass;
             }
         }
         return s + "\n}";

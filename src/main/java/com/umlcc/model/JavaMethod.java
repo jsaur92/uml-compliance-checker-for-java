@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @author Joe Hardy
  */
 public class JavaMethod extends JavaThing {
-    private HashMap<String, JavaVariable> parameters;
+    private ArrayList<JavaVariable> parameters;
     private String returnType;
     private String content;
 
@@ -24,10 +24,7 @@ public class JavaMethod extends JavaThing {
     public JavaMethod(String name, ArrayList<Modifier> modifiers, String comment,
                      ArrayList<JavaVariable> parameters, String returnType, String content) {
         super(name, modifiers, comment);
-        this.parameters = new HashMap<String, JavaVariable>();
-        for (JavaVariable var : parameters) {
-            this.parameters.put(var.getName(), var);
-        }
+        this.parameters = parameters;
         this.returnType = returnType;
         this.content = content;
     }
@@ -65,14 +62,14 @@ public class JavaMethod extends JavaThing {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
         if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
-            for (String parName : getParameters().keySet()) {
-                if (!otherMethod.hasParameter(parName)) results.add(
+            for (JavaVariable par : getParameters()) {
+                if (!otherMethod.hasParameter(par.getName())) results.add(
                         new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
                 );
             }
 
-            for (String parName : otherMethod.getParameters().keySet()) {
-                if (!hasParameter(parName)) results.add(
+            for (JavaVariable par : otherMethod.getParameters()) {
+                if (!hasParameter(par.getName())) results.add(
                         new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
                 );
             }
@@ -100,18 +97,21 @@ public class JavaMethod extends JavaThing {
 
     /**
      * Checks to see if a parameter of a given name exists in parameters.
-     * @param parameterName the name of the parameter
+     * @param name the name of the parameter
      * @return true if the parameter is in parameters, false otherwise.
      */
-    public boolean hasParameter(String parameterName) {
-        return parameters.containsKey(parameterName);
+    public boolean hasParameter(String name) {
+        for (JavaVariable par : parameters) {
+            if (par.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     /**
      * Accessor method for parameters.
      * @return the parameters of this method.
      */
-    public HashMap<String, JavaVariable> getParameters() {
+    public ArrayList<JavaVariable> getParameters() {
         return parameters;
     }
 
@@ -121,7 +121,10 @@ public class JavaMethod extends JavaThing {
      * @return the parameter to access.
      */
     public JavaVariable getParameter(String name) {
-        return parameters.get(name);
+        for (JavaVariable par : parameters) {
+            if (par.getName().equals(name)) return par;
+        }
+        return null;
     }
 
     /**
@@ -146,7 +149,7 @@ public class JavaMethod extends JavaThing {
         for (Modifier mod : getModifiers()) s += mod + " ";
         if (getReturnType() != null) s += getReturnType() + " ";
         s += getName() + "(";
-        for (JavaVariable var : getParameters().values()) {
+        for (JavaVariable var : getParameters()) {
             s += var + ", ";
         }
         if (s.endsWith(", ")) s = s.substring(0, s.length()-2);

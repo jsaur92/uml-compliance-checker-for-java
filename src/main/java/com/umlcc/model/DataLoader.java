@@ -41,7 +41,7 @@ public class DataLoader extends DataConstants {
                     files.add(new UserFile(f.getName(), content));
                 }
             }
-            dir = new Directory(rootDir.getName(), files, dirs);
+            dir = new Directory(rootDir.getName(), dirs, files);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -96,13 +96,13 @@ public class DataLoader extends DataConstants {
                 thisFileText = "";
             }
         }
-        return new Directory(dirName, files, subdirs);
+        return new Directory(dirName, subdirs, files);
     }
 
     private static UserFile loadFileFromUmlcc(String fileText) {
         String[] lines = fileText.split(DELIMITER_NEWLINE);
         String fileName = removeWhitespace(lines[0].split(REGEX_FILE_START)[0]);
-        HashMap<String, JavaClass> classes = new HashMap<String, JavaClass>();
+        ArrayList<JavaClass> classes = new ArrayList<JavaClass>();
         String thisClassText = "";
         int baseTabs = countTabs(lines[0]);
         for (int i = 1; i < lines.length; i++) {
@@ -111,7 +111,7 @@ public class DataLoader extends DataConstants {
             }
             else {
                 JavaClass newClass = loadClassFromUmlcc(thisClassText);
-                classes.put(newClass.getName(), newClass);
+                classes.add(newClass);
                 thisClassText = "";
             }
         }

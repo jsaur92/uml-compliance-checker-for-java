@@ -8,8 +8,8 @@ import java.util.HashMap;
  * @author Joe Hardy
  */
 public class JavaClass extends JavaThing {
-    private HashMap<String, JavaVariable> variables;
-    private HashMap<String, JavaMethod> methods;
+    private ArrayList<JavaVariable> variables;
+    private ArrayList<JavaMethod> methods;
     private boolean isInterface;
 
     /**
@@ -25,14 +25,8 @@ public class JavaClass extends JavaThing {
                      ArrayList<JavaVariable> variables, ArrayList<JavaMethod> methods,
                      boolean isInterface) {
         super(name, modifiers, comment);
-        this.variables = new HashMap<String, JavaVariable>();
-        for (JavaVariable var : variables) {
-            this.variables.put(var.getName(), var);
-        }
-        this.methods = new HashMap<String, JavaMethod>();
-        for (JavaMethod method : methods) {
-            this.methods.put(method.getName(), method);
-        }
+        this.variables = variables;
+        this.methods = methods;
         this.isInterface = isInterface;
     }
 
@@ -51,9 +45,9 @@ public class JavaClass extends JavaThing {
             );
         }
 
-        for (JavaVariable var : variables.values())
+        for (JavaVariable var : variables)
             results.addAll(var.checkCompliance());
-        for (JavaMethod method : methods.values())
+        for (JavaMethod method : methods)
             results.addAll(method.checkCompliance());
 
         return results;
@@ -65,38 +59,38 @@ public class JavaClass extends JavaThing {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
         if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
-            for (String varName : otherClass.getVariables().keySet()) {
-                if (!hasVariable(varName)) results.add(
+            for (JavaVariable var : otherClass.getVariables()) {
+                if (!hasVariable(var.getName())) results.add(
                         new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
                 );
             }
-            for (String methodName : otherClass.getMethods().keySet()) {
-                if (!hasMethod(methodName)) results.add(
+            for (JavaMethod method : otherClass.getMethods()) {
+                if (!hasMethod(method.getName())) results.add(
                         new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
                 );
             }
         }
 
         if (config.hasWarning(Warning.EXTRA_CLASS_ATTRIBUTE)) {
-            for (String varName : variables.keySet()) {
-                if (!otherClass.hasVariable(varName)) results.add(
+            for (JavaVariable var : variables) {
+                if (!otherClass.hasVariable(var.getName())) results.add(
                         new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
                 );
             }
         }
 
         if (config.hasWarning(Warning.EXTRA_NON_PRIVATE_METHOD)) {
-            for (String methodName : methods.keySet()) {
-                if (!otherClass.hasMethod(methodName)) results.add(
+            for (JavaMethod method : methods) {
+                if (!otherClass.hasMethod(method.getName())) results.add(
                         new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
                 );
             }
         }
 
-        for (String varName : variables.keySet())
-            results.addAll(getVariable(varName).checkCompliance(otherClass.getVariable(varName)));
-        for (String methodName : methods.keySet())
-            results.addAll(getMethod(methodName).checkCompliance(otherClass.getMethod(methodName)));
+        for (JavaVariable var : variables)
+            results.addAll(var.checkCompliance(otherClass.getVariable(var.getName())));
+        for (JavaMethod method : methods)
+            results.addAll(method.checkCompliance(otherClass.getMethod(method.getName())));
 
         return results;
     }
@@ -112,18 +106,18 @@ public class JavaClass extends JavaThing {
     }
 
     /**
-     * Accessor method for the variables HashMap.
-     * @return the variables HashMap.
+     * Accessor method for the variables ArrayList.
+     * @return the variables ArrayList.
      */
-    public HashMap<String, JavaVariable> getVariables() {
+    public ArrayList<JavaVariable> getVariables() {
         return variables;
     }
 
     /**
-     * Accessor method for the methods HashMap.
-     * @return the methods HashMap.
+     * Accessor method for the methods ArrayList.
+     * @return the methods ArrayList.
      */
-    public HashMap<String, JavaMethod> getMethods() {
+    public ArrayList<JavaMethod> getMethods() {
         return methods;
     }
 
@@ -133,7 +127,10 @@ public class JavaClass extends JavaThing {
      * @return true if this class has the given variable, false otherwise.
      */
     public boolean hasVariable(String name) {
-        return variables.containsKey(name);
+        for (JavaVariable var : variables) {
+            if (var.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     /**
@@ -142,7 +139,10 @@ public class JavaClass extends JavaThing {
      * @return true if this class has the given method, false otherwise.
      */
     public boolean hasMethod(String name) {
-        return methods.containsKey(name);
+        for (JavaMethod method : methods) {
+            if (method.getName().equals(name)) return true;
+        }
+        return false;
     }
 
     /**
@@ -151,7 +151,10 @@ public class JavaClass extends JavaThing {
      * @return the variable to access.
      */
     public JavaVariable getVariable(String name) {
-        return variables.get(name);
+        for (JavaVariable var : variables) {
+            if (var.getName().equals(name)) return var;
+        }
+        return null;
     }
 
     /**
@@ -160,7 +163,10 @@ public class JavaClass extends JavaThing {
      * @return the variable to access.
      */
     public JavaMethod getMethod(String name) {
-        return methods.get(name);
+        for (JavaMethod method : methods) {
+            if (method.getName().equals(name)) return method;
+        }
+        return null;
     }
 
     /**
@@ -184,7 +190,7 @@ public class JavaClass extends JavaThing {
      * @return true if this is an interface, false otherwise.
      */
     public boolean isInterface() {
-        return false;
+        return isInterface;
     }
 
     @Override
@@ -197,10 +203,10 @@ public class JavaClass extends JavaThing {
         header += getName();
         // add in logic for extends and implements.
         String body = "";
-        for (JavaVariable var : getVariables().values()) {
+        for (JavaVariable var : getVariables()) {
             body += "\n" + var;
         }
-        for (JavaMethod method : getMethods().values()) {
+        for (JavaMethod method : getMethods()) {
             body += "\n" + method;
         }
         body = body.replaceAll("\n", "\n\t");   //indent the body
