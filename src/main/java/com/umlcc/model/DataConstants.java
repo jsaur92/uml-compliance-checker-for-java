@@ -16,6 +16,7 @@ public abstract class DataConstants {
     protected final static String CONFIG_WARNINGS_MESSAGE = "message";
 
     protected final static String UMLCC_DIR_PATH = "umlcc/";
+    protected final static String UMLCC_FILE_EXTENSION = ".umlcc";
     protected final static String REGEX_FILE_START = "\\{";
     protected final static String DELIMITER_FILE_START = "{";
     protected final static String DELIMITER_FILE_END = "}";
@@ -25,6 +26,7 @@ public abstract class DataConstants {
     protected final static String DELIMITER_NEWLINE = "\n";
     protected final static String DELIMITER_SPACE = " ";
     protected final static String DELIMITER_DOT = ".";
+    protected final static String DELIMITER_SLASH = "/";
 
     protected final static String CLASS_DESIGNATION = "class";
     protected final static String INTERFACE_DESIGNATION = "interface";

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * Static class for loading in JSON data and Java project repositories.
+ * Class for statically loading in JSON data and Java project repositories.
  * @author Joe Hardy
  */
 public class DataLoader extends DataConstants {
