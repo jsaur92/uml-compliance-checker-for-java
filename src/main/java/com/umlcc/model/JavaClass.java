@@ -1,7 +1,6 @@
 package com.umlcc.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * A single Java class.
@@ -10,7 +9,8 @@ import java.util.HashMap;
 public class JavaClass extends JavaThing {
     private ArrayList<JavaVariable> variables;
     private ArrayList<JavaMethod> methods;
-    private boolean isInterface;
+    private ArrayList<String> inheritedNames;
+    private String implementedName;
 
     /**
      * Constructor for the JavaClass class.
@@ -19,15 +19,17 @@ public class JavaClass extends JavaThing {
      * @param comment the comment placed above this class.
      * @param variables the variables of this class.
      * @param methods the methods of this class
-     * @param isInterface true if this "class" is actually an interface.
+     * @param inheritedNames the classes this class inherits from.
+     * @param implementedName the class this class implements.
      */
     public JavaClass(String name, ArrayList<Modifier> modifiers, String comment,
                      ArrayList<JavaVariable> variables, ArrayList<JavaMethod> methods,
-                     boolean isInterface) {
+                     ArrayList<String> inheritedNames, String implementedName) {
         super(name, modifiers, comment);
         this.variables = variables;
         this.methods = methods;
-        this.isInterface = isInterface;
+        this.inheritedNames = inheritedNames;
+        this.implementedName = implementedName;
     }
 
     @Override
@@ -186,11 +188,51 @@ public class JavaClass extends JavaThing {
     }
 
     /**
-     * Determines if this class is actually an interface or not.
-     * @return true if this is an interface, false otherwise.
+     * Accesses the inherited class' names.
+     * @return the names of the classes this class inherits.
+     */
+    public ArrayList<String> getInheritedNames() {
+        return inheritedNames;
+    }
+
+    /**
+     * Modifies the inherited class' names.
+     * @param inheritedNames the names of the classes this class inherits.
+     */
+    public void setInheritedNames(ArrayList<String> inheritedNames) {
+        this.inheritedNames = inheritedNames;
+    }
+
+    /**
+     * Accesses the implementedName String.
+     * @return the implementedName String.
+     */
+    public String getImplementedName() {
+        return implementedName;
+    }
+
+    /**
+     * Modifies the implementedName String.
+     * @param implementedName the name of the class to implement.
+     */
+    public void setImplementedName(String implementedName) {
+        this.implementedName = implementedName;
+    }
+
+    /**
+     * Checks if this class inherits any classes.
+     * @return true if this class inherits one or more classes, false otherwise.
+     */
+    public boolean inheritsClasses() {
+        return !inheritedNames.isEmpty();
+    }
+
+    /**
+     * Checks if this class implements any interfaces.
+     * @return true if this class implements an interface, false otherwise.
      */
     public boolean isInterface() {
-        return isInterface;
+        return implementedName != null;
     }
 
     @Override
@@ -201,7 +243,15 @@ public class JavaClass extends JavaThing {
         }
         header += (isInterface() ? "interface " : "class ");
         header += getName();
-        // add in logic for extends and implements.
+        if (inheritsClasses()) {
+            header += " extends " + inheritedNames.getFirst();
+            for (int i = 1; i < inheritedNames.size(); i++) {
+                header += ", " + inheritedNames.get(i);
+            }
+        }
+        if (isInterface()) {
+            header += " implements " + implementedName;
+        }
         String body = "";
         for (JavaVariable var : getVariables()) {
             body += "\n" + var;

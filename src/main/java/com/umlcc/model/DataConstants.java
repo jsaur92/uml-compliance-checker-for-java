@@ -26,10 +26,12 @@ public abstract class DataConstants {
     protected final static String DELIMITER_NEWLINE = "\n";
     protected final static String DELIMITER_SPACE = " ";
     protected final static String DELIMITER_DOT = ".";
+    protected final static String DELIMITER_COMMA = ",";
     protected final static String DELIMITER_SLASH = "/";
 
     protected final static String CLASS_DESIGNATION = "class";
     protected final static String INTERFACE_DESIGNATION = "interface";
+    protected final static String EXTENDS_DESIGNATION = "extends";
 
     /**
      * Make a copy of a String and remove all whitespace characters.

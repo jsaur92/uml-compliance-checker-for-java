@@ -123,6 +123,6 @@ public class Directory {
             body += "\n" + file;
         }
         body = body.replaceAll("\n", "\n\t");   //indent the body
-        return header + body;
+        return header + body + "\n}";
     }
 }

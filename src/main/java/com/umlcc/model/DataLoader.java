@@ -123,18 +123,21 @@ public class DataLoader extends DataConstants {
         String[] lines = classText.split(DELIMITER_NEWLINE);
         String classLine = lines[0].replaceAll(DELIMITER_TAB, "");
         String[] parts = classLine.split(DELIMITER_SPACE);
-        boolean is_interface = false;
         String name = "";
+        ArrayList<String> inherited = new ArrayList<String>();
+        String implemented = null;
         for (int i = 0; i < parts.length; i++) {     // iterate to find where it says 'class' or 'interface'.
             if (parts[i].equals(CLASS_DESIGNATION)) {
-                is_interface = false;
                 name = parts[i+1];
-                break;
             }
             else if (parts[i].equals(INTERFACE_DESIGNATION)) {
-                is_interface = true;
+                implemented = parts[parts.length-1];
                 name = parts[i+1];
-                break;
+            }
+            if (parts[i].equals(EXTENDS_DESIGNATION)) {
+                for (int j = i+1; (j < parts.length) && (!parts[j].equals(INTERFACE_DESIGNATION)); j++) {
+                    inherited.add( removeWhitespace(parts[j]).replaceAll(DELIMITER_COMMA, "") );
+                }
             }
         }
         ArrayList<Modifier> mods = parseMods(parts);
@@ -147,7 +150,8 @@ public class DataLoader extends DataConstants {
             else
                 vars.add(loadVarFromUmlcc(lines[i]));
         }
-        return new JavaClass(name, mods, "", vars, methods, is_interface);
+        JavaClass jClass = new JavaClass(name, mods, "", vars, methods, inherited, implemented);
+        return jClass;
     }
 
     private static JavaMethod loadMethodFromUmlcc(String line) {
