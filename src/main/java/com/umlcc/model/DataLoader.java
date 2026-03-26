@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -155,6 +156,7 @@ public class DataLoader extends DataConstants {
         String[] parts = partsFull.split(DELIMITER_SPACE);
         String name = parts[parts.length-1];
         String type = parts[parts.length-2];
+        if (Modifier.hasValue(removeWhitespace(type))) type = null;
         ArrayList<Modifier> mods = parseMods(parts);
 
         String paramsFull = line.substring(paramStart+1, line.length()-1);
@@ -179,9 +181,10 @@ public class DataLoader extends DataConstants {
 
     private static ArrayList<Modifier> parseMods(String[] parts) {
         ArrayList<Modifier> mods = new ArrayList<Modifier>();
-        for (int i = 0; i < parts.length-2; i++) {
-            if (Modifier.hasValue(parts[i])) {
-                mods.add(Modifier.fromString(parts[i]));
+        for (String part : parts) {
+            part = removeWhitespace(part);
+            if (Modifier.hasValue(part)) {
+                mods.add(Modifier.fromString(part));
             }
         }
         return mods;

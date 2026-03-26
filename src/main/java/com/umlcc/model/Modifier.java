@@ -39,4 +39,12 @@ public enum Modifier {
         }
         return false;
     }
+
+    /**
+     * Convert this modifier to string form.
+     * @return the name of this modifier in all lowercase.
+     */
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

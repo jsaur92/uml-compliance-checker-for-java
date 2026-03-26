@@ -108,13 +108,15 @@ public class Directory {
 
     @Override
     public String toString() {
-        String s = getName();
+        String header = getName() + " {";
+        String body = "";
         for (String key : subdirs.keySet()) {
-            s += "\n" + subdirs.get(key);
+            body += "\n" + subdirs.get(key);
         }
         for (String key : files.keySet()) {
-            s += "\n" + files.get(key);
+            body += "\n" + files.get(key);
         }
-        return s;
+        body = body.replaceAll("\n", "\n\t");   //indent the body
+        return header + body;
     }
 }

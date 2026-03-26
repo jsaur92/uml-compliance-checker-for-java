@@ -189,7 +189,13 @@ public class JavaClass extends JavaThing {
 
     @Override
     public String toString() {
-        String header = getName();
+        String header = "";
+        for (Modifier modifier : getModifiers()) {
+            header += modifier.toString() + " ";
+        }
+        header += (isInterface() ? "interface " : "class ");
+        header += getName();
+        // add in logic for extends and implements.
         String body = "";
         for (JavaVariable var : getVariables().values()) {
             body += "\n" + var;
