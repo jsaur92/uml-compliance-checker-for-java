@@ -95,8 +95,17 @@ public class UserFile {
         return results;
     }
 
+    /**
+     * Determines if this file is a Java file.
+     * @return true if this has the .java file extension, false otherwise.
+     */
+    public boolean isJavaFile() {
+        return name.endsWith(".java");
+    }
+
     @Override
     public String toString() {
+        if (!isJavaFile()) return getName();
         String s = getName() + " {";
         if (classes != null) {
             for (JavaClass jClass : classes) {

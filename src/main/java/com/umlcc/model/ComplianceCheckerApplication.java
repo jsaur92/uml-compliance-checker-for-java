@@ -65,8 +65,13 @@ public class ComplianceCheckerApplication {
         return user.getUserType();
     }
 
-    public boolean generateUmlcc() {
-        return false;
+    /**
+     * Save a directory as a .umlcc file to the umlcc directory.
+     * @param dir the directory to save.
+     * @return true if saving successful, false otherwise.
+     */
+    public boolean saveAsUmlccFile(Directory dir) {
+        return DataWriter.saveAsUmlccFile(dir);
     }
 
     /**

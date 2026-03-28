@@ -1,0 +1,57 @@
+singleton/ {
+	txt/ {
+		bottoms.txt
+		tops.txt
+		wholes.txt
+	}
+	ClothingItem.java {
+	public class ClothingItem
+		private String name
+		private String color
+		private new ArrayList<Season>()
+		public ClothingItem(String name, String color)
+		public void addSeason(Season season)
+		public boolean hasSeason(Season season)
+		public String toString()
+	}
+	ClothingPart.java {
+	public enum ClothingPart
+	}
+	FileReader.java {
+	public class FileReader
+		private static final = "singleton/txt/tops.txt"
+		private static final = "singleton/txt/bottoms.txt"
+		private static final = "singleton/txt/wholes.txt"
+		public static ArrayList<ClothingItem> getTops()
+		public static ArrayList<ClothingItem> getBottoms()
+		public static ArrayList<ClothingItem> getwholes()
+		private static ArrayList<ClothingItem> getClothing(String fileName)
+		private static boolean hasSeason(String[] data, Season season)
+	}
+	OutfitCreator.java {
+	public class OutfitCreator
+		private static OutfitCreator outfitCreator
+		private Random rand
+		private new HashMap<>()
+		private OutfitCreator()
+		public static OutfitCreator getInstance()
+		private ClothingItem getRandClothingItem(ClothingPart part, Season season)
+		public String getOutfit(Season season)
+	}
+	OutfitDriver.java {
+	public class OutfitDriver
+		private static final = "y"
+		private static final = "n"
+			Scanner reader
+		public OutfitDriver()
+		public void runCreator()
+		private boolean runAgain()
+		private Season getSeason()
+		private void displaySeasons()
+		public static void main(String[] args)
+	}
+	Season.java {
+	public enum Season
+	}
+	UML.pdf
+}

@@ -11,6 +11,7 @@ public class JavaClass extends JavaThing {
     private ArrayList<JavaMethod> methods;
     private ArrayList<String> inheritedNames;
     private String implementedName;
+    private String classType;
 
     /**
      * Constructor for the JavaClass class.
@@ -21,15 +22,17 @@ public class JavaClass extends JavaThing {
      * @param methods the methods of this class
      * @param inheritedNames the classes this class inherits from.
      * @param implementedName the class this class implements.
+     * @param classType the "type" of the class, such as "class", "interface", or "enum".
      */
     public JavaClass(String name, ArrayList<Modifier> modifiers, String comment,
                      ArrayList<JavaVariable> variables, ArrayList<JavaMethod> methods,
-                     ArrayList<String> inheritedNames, String implementedName) {
+                     ArrayList<String> inheritedNames, String implementedName, String classType) {
         super(name, modifiers, comment);
         this.variables = variables;
         this.methods = methods;
         this.inheritedNames = inheritedNames;
         this.implementedName = implementedName;
+        this.classType = classType;
     }
 
     @Override
@@ -232,7 +235,7 @@ public class JavaClass extends JavaThing {
      * @return true if this class implements an interface, false otherwise.
      */
     public boolean isInterface() {
-        return implementedName != null;
+        return classType.equals("interface");
     }
 
     @Override
@@ -241,7 +244,7 @@ public class JavaClass extends JavaThing {
         for (Modifier modifier : getModifiers()) {
             header += modifier.toString() + " ";
         }
-        header += (isInterface() ? "interface " : "class ");
+        header += classType + " ";
         header += getName();
         if (inheritsClasses()) {
             header += " extends " + inheritedNames.getFirst();
@@ -249,7 +252,7 @@ public class JavaClass extends JavaThing {
                 header += ", " + inheritedNames.get(i);
             }
         }
-        if (isInterface()) {
+        if (getImplementedName() != null) {
             header += " implements " + implementedName;
         }
         String body = "";

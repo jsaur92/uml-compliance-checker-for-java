@@ -1,4 +1,11 @@
 strategy/ {
+	.idea/ {
+		modules.xml
+		misc.xml
+		vcs.xml
+		.gitignore
+		workspace.xml
+	}
 	Animal.java {
 	public abstract class Animal
 		protected String name
@@ -8,11 +15,10 @@ strategy/ {
 		public void move()
 		public String toString()
 	}
-	
 	AnimalWorld.java {
 	public class AnimalWorld
-		private static final String YES
-		private static final String NO
+		private static final = "y"
+		private static final = "n"
 		private Scanner reader
 		public AnimalWorld()
 		public void run()
@@ -21,45 +27,39 @@ strategy/ {
 		private boolean playAgain()
 		public static void main(String[] args)
 	}
-
 	Bird.java {
 	public class Bird extends Animal
 		public Bird(String name)
 	}
-
 	Elephant.java {
 	public class Elephant extends Animal
 		public Elephant(String name)
 	}
-
 	JumpBehavior.java {
 	public class JumpBehavior extends MoveBehavior
 		public JumpBehavior(ArrayList<String> character, int speed)
-		public void move()
+		public void move() {)
 	}
-
 	MoveBehavior.java {
 	public abstract class MoveBehavior
-		private static final int NUM_MOVES
+		private static final = 30
 		protected int speed
 		private ArrayList<String> character
 		public MoveBehavior(ArrayList<String> character, int speed)
 		public abstract void move()
-		protected void move(boolean jump)
+		protected void move(jump) {)
 		private void displayCharacter()
 		private void pushCharacterForward()
 		private void sleep(int num)
 		private void clear()
 	}
-	
 	Rabbit.java {
-	public class Rabbit extends Animal
-		public Rabbit(String name)
 	}
-
+	UML.pdf
 	WalkBehavior.java {
 	public class WalkBehavior extends MoveBehavior
 		public WalkBehavior(ArrayList<String> character, int speed)
 		public void move()
 	}
+	strategy.iml
 }

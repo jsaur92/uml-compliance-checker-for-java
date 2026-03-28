@@ -143,6 +143,14 @@ public class JavaMethod extends JavaThing {
         return content;
     }
 
+    /**
+     * Mutator method for the content.
+     * @param content the code to put inside this method.
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         String s = "";

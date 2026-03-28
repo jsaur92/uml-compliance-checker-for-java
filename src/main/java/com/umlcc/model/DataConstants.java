@@ -18,6 +18,7 @@ public abstract class DataConstants {
     protected final static String UMLCC_DIR_PATH = "umlcc/";
     protected final static String UMLCC_FILE_EXTENSION = ".umlcc";
     protected final static String REGEX_FILE_START = "\\{";
+    protected final static String REGEX_FILE_END = "\\}";
     protected final static String DELIMITER_FILE_START = "{";
     protected final static String DELIMITER_FILE_END = "}";
     protected final static String DELIMITER_METHOD_START = "(";
@@ -28,10 +29,13 @@ public abstract class DataConstants {
     protected final static String DELIMITER_DOT = ".";
     protected final static String DELIMITER_COMMA = ",";
     protected final static String DELIMITER_SLASH = "/";
+    protected final static String DELIMITER_SEMICOLON = ";";
 
     protected final static String CLASS_DESIGNATION = "class";
     protected final static String INTERFACE_DESIGNATION = "interface";
     protected final static String EXTENDS_DESIGNATION = "extends";
+    protected final static String IMPLEMENTS_DESIGNATION = "implements";
+    protected final static String ENUM_DESIGNATION = "enum";
 
     /**
      * Make a copy of a String and remove all whitespace characters.

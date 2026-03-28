@@ -1,0 +1,58 @@
+observer/ {
+	Baby.java {
+	public class Baby implements Subject
+		private String name
+		private ArrayList<Observer> observers
+		private Random rand
+		public Baby(String name)
+		public String getName()
+		public void receiveLove()
+		public void eat()
+		public void getChanged()
+		public void registerObserver(Observer observer)
+		public void notifyObservers(Cry cry)
+		public void removeObserver(Observer observer)
+		public void angryCry()
+		public void hungryCry()
+		public void wetCry()
+	}
+	CribDriver.java {
+	public class CribDriver
+		private static final = "y"
+		private static final = "n"
+		private Scanner reader
+		public CribDriver()
+		public void run()
+		private int getInt(String prompt)
+		private String getText(String prompt)
+		private boolean playAgain()
+		public static void main(String[] args)
+	}
+	Cry.java {
+	public enum Cry
+	}
+	Dad.java {
+	public class Dad extends Observer
+		public Dad(ArrayList<Baby> babies)
+		public void update(Cry cry, Baby baby)
+	}
+	Mom.java {
+	public class Mom extends Observer
+		public Mom(ArrayList<Baby> babies)
+		public void update(Cry cry, Baby baby)
+	}
+	Observer.java {
+	public abstract class Observer
+		protected Random rand
+		public Observer(ArrayList<Baby> babies)
+		public abstract void update(Cry cry, Baby baby)
+	}
+	Subject.java {
+	public interface Subject
+		public void registerObserver(Observer observer)
+		public void removeObserver(Observer observer)
+		public void notifyObservers(Cry cry)
+	}
+	UML.pdf
+	output.txt
+}

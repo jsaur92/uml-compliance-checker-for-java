@@ -1,0 +1,67 @@
+command/ {
+	text/ {
+		todo.txt
+	}
+	AppendCommand.java {
+	public class AppendCommand extends Command
+		private new Scanner()
+		public AppendCommand(Document document)
+		public String execute()
+	}
+	Command.java {
+	public abstract class Command
+		protected Document document
+		public Command(Document document)
+		public abstract String execute()
+	}
+	Document.java {
+	public class Document
+		private static final = 5
+		private String fileName
+		private ArrayList<String> lines
+		public Document(String fileName)
+		public String view()
+		private String getPadding(int num)
+		private String getRowBorder(int lineLength)
+		private int getLineLength()
+		public String append(String line)
+		public String write(String line)
+		public String save()
+	}
+	DocumentDriver.java {
+	public class DocumentDriver
+		public void runDocumentDriver()
+		private String getInputLine(String prompt, Scanner in)
+		public static void main(String[] args)
+	}
+	FileManipulator.java {
+	public class FileManipulator
+		public static ArrayList<String> readFile(String fileName)
+		public static boolean writeFile(String fileName, ArrayList<String> lines)
+	}
+	InputHandler.java {
+	public class InputHandler
+		private Command> commands
+		public InputHandler(Document document)
+		public void inputEntered(String data)
+	}
+	SaveCommand.java {
+	public class SaveCommand extends Command
+		public SaveCommand(Document document)
+		public String execute()
+	}
+	UML.pdf
+	ViewCommand.java {
+	public class ViewCommand extends Command
+		public ViewCommand(Document document)
+		public String execute()
+	}
+	WriteCommand.java {
+	public class WriteCommand extends Command
+		private new Scanner()
+		public WriteCommand(Document document)
+		public String execute()
+	}
+	command-uml.pdf
+	output.txt
+}

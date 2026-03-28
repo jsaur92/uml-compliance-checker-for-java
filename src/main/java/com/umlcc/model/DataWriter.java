@@ -19,9 +19,11 @@ public class DataWriter extends DataConstants {
     public static boolean saveAsUmlccFile(Directory dir) {
         try {
             String dirName = dir.getName();
-            if (dirName.endsWith(DELIMITER_SLASH)) dirName = dirName.substring(dirName.length()-1);
-            FileWriter writer = new FileWriter(UMLCC_DIR_PATH + dir.getName() + UMLCC_FILE_EXTENSION);
+            if (dirName.endsWith(DELIMITER_SLASH)) dirName = dirName.substring(0, dirName.length()-1);
+            FileWriter writer = new FileWriter(UMLCC_DIR_PATH + dirName + UMLCC_FILE_EXTENSION);
+            System.out.println(dir);
             writer.write(dir.toString());
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
             return false;
