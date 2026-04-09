@@ -75,4 +75,21 @@ public class Config {
         warningMessages.remove(warning);
         return true;
     }
+
+    /**
+     * Accessor method for warningMessages.
+     * @return the warningMessahes HashMap.
+     */
+    public HashMap<Warning, String> getWarningMessages() {
+        return warningMessages;
+    }
+
+    /**
+     * Mutator method for warningMessages.
+     * @return true if successful.
+     */
+    public boolean setWarningMessages(HashMap<Warning, String> warningMessages) {
+        this.warningMessages = warningMessages;
+        return true;
+    }
 }

@@ -1,7 +1,8 @@
 package com.umlcc.model;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 
 import java.io.FileWriter;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ public class DataWriter extends DataConstants {
             String dirName = dir.getName();
             if (dirName.endsWith(DELIMITER_SLASH)) dirName = dirName.substring(0, dirName.length()-1);
             FileWriter writer = new FileWriter(UMLCC_DIR_PATH + dirName + UMLCC_FILE_EXTENSION);
-            System.out.println(dir);
             writer.write(dir.toString());
             writer.close();
         } catch (Exception e) {
@@ -62,14 +62,14 @@ public class DataWriter extends DataConstants {
         JSONArray wmsArray= new JSONArray();
         for (Warning key : warningMessages.keySet()) {
             JSONObject wm = new JSONObject();
-            wm.put(CONFIG_WARNINGS_WARNING, key);
+            wm.put(CONFIG_WARNINGS_WARNING, key.toString());
             wm.put(CONFIG_WARNINGS_MESSAGE, warningMessages.get(key));
-            wmsArray.add(wm);
+            wmsArray.put(wm);
         }
         configJson.put(CONFIG_WARNINGS, wmsArray);
         try {
             FileWriter writer = new FileWriter(JSON_DIR_PATH + CONFIG_FILE_NAME);
-            writer.write(configJson.toString());
+            writer.write(configJson.toString(JSON_INDENT));
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();

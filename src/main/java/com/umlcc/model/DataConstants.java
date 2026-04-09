@@ -37,6 +37,8 @@ public abstract class DataConstants {
     protected final static String IMPLEMENTS_DESIGNATION = "implements";
     protected final static String ENUM_DESIGNATION = "enum";
 
+    protected final static int JSON_INDENT = 2;
+
     /**
      * Make a copy of a String and remove all whitespace characters.
      * @param s the String to operate on.

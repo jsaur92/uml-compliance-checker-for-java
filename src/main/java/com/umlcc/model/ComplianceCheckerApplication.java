@@ -163,13 +163,15 @@ public class ComplianceCheckerApplication {
      * @return true if changed, false otherwise.
      */
     public boolean setConfig(HashMap<Warning, String> warningMessages) {
-        return false;
+        return config.setWarningMessages(warningMessages);
     }
 
     /**
      * Close the application.
      */
     public void close() {
+//        DataWriter.saveUser(user);
+        DataWriter.saveConfigData(config.getWarningMessages());
         System.exit(0);
     }
 }

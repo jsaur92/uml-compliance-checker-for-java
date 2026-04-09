@@ -1,8 +1,7 @@
 package com.umlcc.model;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileReader;
@@ -301,10 +300,12 @@ public class DataLoader extends DataConstants {
      * @return the User object from the user.json file.
      */
     public static User loadUser() {
-        JSONParser parser = new JSONParser();
         User user;
         try {
-            JSONObject userJson = (JSONObject) parser.parse(new FileReader(JSON_DIR_PATH + USER_FILE_NAME));
+            String source = "";
+            Scanner sourceScanner = new Scanner(new File(JSON_DIR_PATH + USER_FILE_NAME));
+            while (sourceScanner.hasNext()) source += sourceScanner.nextLine() + DELIMITER_NEWLINE;
+            JSONObject userJson = new JSONObject(source);
             UserType type = (UserType) userJson.get(USER_TYPE);
             String lastUml = (String) userJson.get(USER_LAST_UML);
             String lastMyCode = (String) userJson.get(USER_LAST_MY_CODE);
@@ -321,17 +322,21 @@ public class DataLoader extends DataConstants {
      * @return the HashMap with warningMessage data for Config.
      */
     public static HashMap<Warning, String> loadConfigData() {
-        JSONParser parser = new JSONParser();
         HashMap<Warning, String> warningMessages = new HashMap<Warning, String>();
         try {
-            JSONObject configJson = (JSONObject) parser.parse(new FileReader(JSON_DIR_PATH + CONFIG_FILE_NAME));
+            String source = "";
+            Scanner sourceScanner = new Scanner(new File(JSON_DIR_PATH + CONFIG_FILE_NAME));
+            while (sourceScanner.hasNext()) source += sourceScanner.nextLine() + DELIMITER_NEWLINE;
+            JSONObject configJson = new JSONObject(source);
             JSONArray wmArray = (JSONArray) configJson.get(CONFIG_WARNINGS);
             for (Object obj : wmArray) {
                 JSONObject wm = (JSONObject) obj;
-                warningMessages.put( (Warning) wm.get(CONFIG_WARNINGS_WARNING),
+                warningMessages.put( Warning.valueOf((String) wm.get(CONFIG_WARNINGS_WARNING)),
                                      (String) wm.get(CONFIG_WARNINGS_MESSAGE) );
             }
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return warningMessages;
     }
 }
