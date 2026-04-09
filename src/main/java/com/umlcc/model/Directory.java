@@ -112,6 +112,37 @@ public class Directory {
         this.subdirs = subdirs;
     }
 
+    /**
+     * Compiles all of the compliance checks of this repository's files.
+     * @return the list of EvaluationResults resulting from this compliance check.
+     */
+    public ArrayList<EvaluationResult> checkCompliance() {
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+        for (UserFile file : files) {
+            results.addAll(file.checkCompliance());
+        }
+        for (Directory dir : subdirs) {
+            results.addAll(dir.checkCompliance());
+        }
+        return results;
+    }
+
+    /**
+     * Compiles all of the compliance checks of this repository's files.
+     * @param other the other directory to compare this one to.
+     * @return the list of EvaluationResults resulting from this compliance check.
+     */
+    public ArrayList<EvaluationResult> checkCompliance(Directory other) {
+        ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
+        for (UserFile file : files) {
+            results.addAll(file.checkCompliance(other.getFile(file.getName())));
+        }
+        for (Directory dir : subdirs) {
+            results.addAll(dir.checkCompliance(other));
+        }
+        return results;
+    }
+
     @Override
     public String toString() {
         String header = getName() + " {";

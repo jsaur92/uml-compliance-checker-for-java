@@ -32,21 +32,50 @@ public class ComplianceChecker {
         return complianceChecker;
     }
 
+    /**
+     * Load a Directory into the umlData variable with a repository to a Java project.
+     * @param rootname path to the root of the Java project repository.
+     * @return true if successful.
+     */
     public boolean loadUmlDataByRepo(String rootname) {
-        return false;
+        umlData = DataLoader.loadRepo(rootname);
+        return true;
     }
 
+    /**
+     * Load a Directory into the umlData variable with a .umlcc file.
+     * @param pathname path to the .umlcc file.
+     * @return true if successful.
+     */
     public boolean loadUmlDataByUmlcc(String pathname) {
-        File umlcc = new File(pathname);
-        try {
-            FileReader uReader = new FileReader(umlcc);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return false;
+        umlData = DataLoader.loadUmlcc(pathname);
+        return true;
     }
 
+    /**
+     * Reset the current umlData to be null.
+     * @return true if successful.
+     */
+    public boolean clearUmlData() {
+        umlData = null;
+        return true;
+    }
+
+    /**
+     * Check the UML compliance of a Java project. Compares against umlData if
+     * umlData is not null.
+     * @param rootname the Java project to check.
+     * @return the output that shows every error/warning for the project.
+     */
     public ArrayList<String> checkCompliance(String rootname) {
-        return null;
+        Directory toCheck = DataLoader.loadRepo(rootname);
+        ArrayList<EvaluationResult> results;
+        if (umlData == null) results = toCheck.checkCompliance();
+        else results = toCheck.checkCompliance(umlData);
+        ArrayList<String> output = new ArrayList<String>();
+        for (EvaluationResult result : results) {
+            output.add(result.toString());
+        }
+        return output;
     }
 }

@@ -75,25 +75,40 @@ public class ComplianceCheckerApplication {
     }
 
     /**
-     * Load a Directory containing all the data from a real Java project repository.
+     * Load a Directory containing all the data from a real Java project
+     * repository into the ComplianceChecker instance.
      * @param rootname the root of the file
-     * @return the Directory.
+     * @return true if successful.
      */
-    public Directory loadUmlDataByRepo(String rootname) {
-        return DataLoader.loadRepo(rootname);
+    public boolean loadUmlDataByRepo(String rootname) {
+        return complianceChecker.loadUmlDataByRepo(rootname);
     }
 
     /**
      * Load a Directory containing all the data from a .umlcc file.
      * @param pathname path to the .umlcc file.
-     * @return the Directory.
+     * @return true if successful.
      */
-    public Directory loadUmlDataByUmlcc(String pathname) {
-        return DataLoader.loadUmlcc(pathname);
+    public boolean loadUmlDataByUmlcc(String pathname) {
+        return complianceChecker.loadUmlDataByUmlcc(pathname);
     }
 
+    /**
+     * Reset the current umlData to be null.
+     * @return true if successful.
+     */
+    public boolean clearUmlData() {
+        return complianceChecker.clearUmlData();
+    }
+
+    /**
+     * Check the UML compliance of a Java project. Compares against umlData if
+     * umlData is not null.
+     * @param rootname the Java project to check.
+     * @return the output that shows every error/warning for the project.
+     */
     public ArrayList<String> checkCompliance(String rootname) {
-        return null;
+        return complianceChecker.checkCompliance(rootname);
     }
 
     public ArrayList<Directory> getSubDirs() {

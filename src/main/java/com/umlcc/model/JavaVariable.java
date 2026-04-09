@@ -32,6 +32,7 @@ public class JavaVariable extends JavaThing {
 
     @Override
     public ArrayList<EvaluationResult> checkCompliance(JavaThing other) {
+        System.out.println("Comparing "+toString()+" to "+other);
         JavaVariable otherVar = (JavaVariable) other;
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
@@ -47,6 +48,13 @@ public class JavaVariable extends JavaThing {
                     new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
             );
         }
+
+        if (config.hasWarning(Warning.EXTRA_CLASS_ATTRIBUTE)) {
+            if (other == null) results.add(
+                    new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
+            );
+        }
+        System.out.println("RESULTCOUNT: "+results.size());
         return results;
     }
 
