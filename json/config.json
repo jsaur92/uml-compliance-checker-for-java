@@ -1,58 +1,58 @@
 {"warnings": [
   {
-    "warning": "MISSING_FILE",
-    "message": "Missing file."
-  },
-  {
-    "warning": "NO_JAVADOC_RETURN",
-    "message": "Missing a @return in a method JavaDoc."
-  },
-  {
-    "warning": "NOT_FOLLOWING_UML",
-    "message": "Not following the UML correctly."
-  },
-  {
-    "warning": "NO_JAVADOC_METHOD",
-    "message": "Missing JavaDoc in a method."
-  },
-  {
-    "warning": "EXTRA_FILE",
-    "message": "Extra file."
+    "warning": "NONE",
+    "message": "No problems here!"
   },
   {
     "warning": "NO_JAVADOC_PARAMETER",
     "message": "Missing a @parameter in a method JavaDoc."
   },
   {
-    "warning": "NO_JAVADOC_AUTHOR",
-    "message": "Missing @author in your class summary JavaDoc."
-  },
-  {
     "warning": "SPACING_ISSUES",
     "message": "Spacing issues."
-  },
-  {
-    "warning": "INDENTATION_ISSUES",
-    "message": "Indentation issues."
   },
   {
     "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
     "message": "Incorrect privacy for an attribute."
   },
   {
-    "warning": "NONE",
-    "message": "No problems here!"
+    "warning": "NO_JAVADOC_RETURN",
+    "message": "Missing a @return in a method JavaDoc."
   },
   {
-    "warning": "NO_JAVADOC",
-    "message": "Missing JavaDoc."
+    "warning": "INCORRECT_PRIVACY_METHOD",
+    "message": "Incorrect privacy for a method."
+  },
+  {
+    "warning": "INDENTATION_ISSUES",
+    "message": "Indentation issues."
+  },
+  {
+    "warning": "EXTRA_FILE",
+    "message": "Extra file."
+  },
+  {
+    "warning": "NO_JAVADOC_METHOD",
+    "message": "Missing JavaDoc in a method."
+  },
+  {
+    "warning": "NOT_FOLLOWING_UML",
+    "message": "Not following the UML correctly."
   },
   {
     "warning": "EXTRA_CLASS_ATTRIBUTE",
     "message": "Missing JavaDoc."
   },
   {
-    "warning": "INCORRECT_PRIVACY_METHOD",
-    "message": "Incorrect privacy for a method."
+    "warning": "NO_JAVADOC",
+    "message": "Missing JavaDoc."
+  },
+  {
+    "warning": "MISSING_FILE",
+    "message": "Missing file."
+  },
+  {
+    "warning": "NO_JAVADOC_AUTHOR",
+    "message": "Missing @author in your class summary JavaDoc."
   }
 ]}
