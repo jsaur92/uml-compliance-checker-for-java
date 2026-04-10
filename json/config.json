@@ -1,38 +1,38 @@
 {"warnings": [
   {
-    "warning": "EXTRA_CLASS_ATTRIBUTE",
-    "message": "Extra class attribute."
-  },
-  {
     "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
     "message": "Incorrect privacy for an attribute."
   },
   {
-    "warning": "SPACING_ISSUES",
-    "message": "Spacing issues."
-  },
-  {
-    "warning": "EXTRA_FILE",
-    "message": "Extra file."
+    "warning": "INCORRECT_PRIVACY_METHOD",
+    "message": "Incorrect privacy for a method."
   },
   {
     "warning": "MISSING_FILE",
     "message": "Missing file."
   },
   {
-    "warning": "NOT_FOLLOWING_UML",
-    "message": "Not following the UML correctly."
+    "warning": "EXTRA_FILE",
+    "message": "Extra file."
   },
   {
-    "warning": "INDENTATION_ISSUES",
-    "message": "Indentation issues."
+    "warning": "SPACING_ISSUES",
+    "message": "Spacing issues."
+  },
+  {
+    "warning": "NOT_FOLLOWING_UML",
+    "message": "Not following the UML correctly."
   },
   {
     "warning": "NONE",
     "message": "No problems here!"
   },
   {
-    "warning": "INCORRECT_PRIVACY_METHOD",
-    "message": "Incorrect privacy for a method."
+    "warning": "EXTRA_CLASS_ATTRIBUTE",
+    "message": "Extra class attribute."
+  },
+  {
+    "warning": "INDENTATION_ISSUES",
+    "message": "Indentation issues."
   }
 ]}
