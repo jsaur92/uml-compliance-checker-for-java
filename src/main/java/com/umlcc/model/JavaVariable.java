@@ -36,22 +36,16 @@ public class JavaVariable extends JavaThing {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
         if (other == null) {
-            if (config.hasWarning(Warning.EXTRA_CLASS_ATTRIBUTE)) results.add(
-                    new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
-            );
+            tryAddWarning(results, Warning.EXTRA_CLASS_ATTRIBUTE);
         }
         else {
             // this actually checks all modifiers right now, so it should be tuned to be more specific in the future.
-            if (config.hasWarning(Warning.INCORRECT_PRIVACY_METHOD)) {
-                if (!modifiers.equals(otherVar.getModifiers())) results.add(
-                        new EvaluationResult(Warning.INCORRECT_PRIVACY_METHOD, this, other)
-                );
+            if (!modifiers.equals(otherVar.getModifiers())) {
+                tryAddWarning(results, Warning.INCORRECT_PRIVACY_METHOD, other);
             }
 
-            if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
-                if (!type.equals(otherVar.getType())) results.add(
-                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
-                );
+            if (!type.equals(otherVar.getType())) {
+                tryAddWarning(results, Warning.NOT_FOLLOWING_UML, other);
             }
         }
         return results;

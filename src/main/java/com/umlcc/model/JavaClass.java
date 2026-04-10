@@ -39,15 +39,11 @@ public class JavaClass extends JavaThing {
     public ArrayList<EvaluationResult> checkCompliance() {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
 
-        if (config.hasWarning(Warning.NO_JAVADOC_CLASS)) {
-            if (!hasJavaDoc()) results.add(
-                    new EvaluationResult(Warning.NO_JAVADOC_CLASS, this)
-            );
+        if (!hasJavaDoc()) {
+            tryAddWarning(results, Warning.NO_JAVADOC_CLASS);
         }
-        else if (hasJavaDoc() && config.hasWarning(Warning.NO_JAVADOC_AUTHOR)) {
-            if (getJavaDoc().getBlockTags().contains("@author")) results.add(
-                    new EvaluationResult(Warning.NO_JAVADOC_AUTHOR, this)
-            );
+        else if (getJavaDoc().getBlockTags().contains("@author")) {
+            tryAddWarning(results, Warning.NO_JAVADOC_AUTHOR);
         }
 
         for (JavaVariable var : variables)
@@ -63,33 +59,23 @@ public class JavaClass extends JavaThing {
         JavaClass otherClass = (JavaClass) other;
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
-        if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
-            for (JavaVariable var : otherClass.getVariables()) {
-                if (!hasVariable(var.getName())) results.add(
-                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
-                );
-            }
-            for (JavaMethod method : otherClass.getMethods()) {
-                if (!hasMethod(method.getName())) results.add(
-                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
-                );
-            }
+        for (JavaVariable var : otherClass.getVariables()) {
+            if (!hasVariable(var.getName()))
+                tryAddWarning(results, Warning.NOT_FOLLOWING_UML, other);
+        }
+        for (JavaMethod method : otherClass.getMethods()) {
+            if (!hasMethod(method.getName()))
+                tryAddWarning(results, Warning.NOT_FOLLOWING_UML, other);
         }
 
-        if (config.hasWarning(Warning.EXTRA_CLASS_ATTRIBUTE)) {
-            for (JavaVariable var : variables) {
-                if (!otherClass.hasVariable(var.getName())) results.add(
-                        new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
-                );
-            }
+        for (JavaVariable var : variables) {
+            if (!otherClass.hasVariable(var.getName()))
+                tryAddWarning(results, Warning.EXTRA_CLASS_ATTRIBUTE, other);
         }
 
-        if (config.hasWarning(Warning.EXTRA_NON_PRIVATE_METHOD)) {
-            for (JavaMethod method : methods) {
-                if (!otherClass.hasMethod(method.getName())) results.add(
-                        new EvaluationResult(Warning.EXTRA_CLASS_ATTRIBUTE, this, other)
-                );
-            }
+        for (JavaMethod method : methods) {
+            if (!otherClass.hasMethod(method.getName()))
+                tryAddWarning(results, Warning.EXTRA_NON_PRIVATE_METHOD, other);
         }
 
         for (JavaVariable var : variables)

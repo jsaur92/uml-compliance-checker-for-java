@@ -83,4 +83,30 @@ public abstract class JavaThing {
     public ArrayList<Modifier> getModifiers() {
         return modifiers;
     }
+
+    /**
+     * Attempt adding a warning to the EvaluationResults of a JavaThing.
+     * Used for non-comparing compliance checks.
+     * @param results the ArrayList of EvaluationResults to potentially add to.
+     * @param warning the warning to check for.
+     */
+    protected void tryAddWarning(ArrayList<EvaluationResult> results, Warning warning) {
+        if (config.hasWarning(warning)) results.add(
+                new EvaluationResult(warning, this)
+        );
+    }
+
+    /**
+     * Attempt adding a warning to the EvaluationResults of a JavaThing.
+     * Used for comparing compliance checks.
+     * @param results the ArrayList of EvaluationResults to potentially add to.
+     * @param warning the warning to check for.
+     * @param other the JavaThing to compare to.
+     */
+    protected void tryAddWarning(ArrayList<EvaluationResult> results, Warning warning, JavaThing other) {
+        if (config.hasWarning(warning)) results.add(
+                new EvaluationResult(warning, this, other)
+        );
+    }
+
 }
