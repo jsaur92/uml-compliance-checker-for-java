@@ -19,6 +19,7 @@ public class ComplianceCheckerApplication {
     private ComplianceCheckerApplication() {
         complianceChecker = ComplianceChecker.getInstance();
         config = Config.getInstance();
+        user = loadUser();
     }
 
     /**
@@ -33,11 +34,10 @@ public class ComplianceCheckerApplication {
 
     /**
      * Load user from DataLoader to the user attribute.
-     * @return true if loading was successful, false otherwise.
+     * @return the loaded user data.
      */
-    public boolean loadUser() {
-        user = DataLoader.loadUser();
-        return user != null;
+    public User loadUser() {
+        return DataLoader.loadUser();
     }
 
     /**
@@ -170,7 +170,7 @@ public class ComplianceCheckerApplication {
      * Close the application.
      */
     public void close() {
-//        DataWriter.saveUser(user);
+        DataWriter.saveUser(user);
         DataWriter.saveConfigData(config.getWarningMessages());
         System.exit(0);
     }

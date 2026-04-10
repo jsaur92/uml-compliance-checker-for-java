@@ -44,7 +44,7 @@ public class JavaClass extends JavaThing {
                     new EvaluationResult(Warning.NO_JAVADOC_CLASS, this)
             );
         }
-        else if (config.hasWarning(Warning.NO_JAVADOC_AUTHOR)) {
+        else if (hasJavaDoc() && config.hasWarning(Warning.NO_JAVADOC_AUTHOR)) {
             if (getJavaDoc().getBlockTags().contains("@author")) results.add(
                     new EvaluationResult(Warning.NO_JAVADOC_AUTHOR, this)
             );

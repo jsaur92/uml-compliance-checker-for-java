@@ -33,12 +33,7 @@ public class JavaMethod extends JavaThing {
     public ArrayList<EvaluationResult> checkCompliance() {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
 
-        if (config.hasWarning(Warning.NO_JAVADOC_METHOD)) {
-            if (!hasJavaDoc()) results.add(
-                    new EvaluationResult(Warning.NO_JAVADOC_METHOD, this)
-            );
-        }
-        else {
+        if (hasJavaDoc()) {
             if (config.hasWarning(Warning.NO_JAVADOC_PARAMETER)) {
                 //this checks to see if it has @param at all, but it should check to see if there is @param for every parameter.
                 if (!parameters.isEmpty() && getJavaDoc().getBlockTags().contains("@param")) results.add(
@@ -51,6 +46,10 @@ public class JavaMethod extends JavaThing {
                         new EvaluationResult(Warning.NO_JAVADOC_RETURN, this)
                 );
             }
+        } else if (config.hasWarning(Warning.NO_JAVADOC_METHOD)) {
+            if (!hasJavaDoc()) results.add(
+                    new EvaluationResult(Warning.NO_JAVADOC_METHOD, this)
+            );
         }
 
         return results;
@@ -61,25 +60,34 @@ public class JavaMethod extends JavaThing {
         JavaMethod otherMethod = (JavaMethod) other;
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>(checkCompliance());
 
-        if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
-            for (JavaVariable par : getParameters()) {
-                if (!otherMethod.hasParameter(par.getName())) results.add(
-                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
-                );
-            }
-
-            for (JavaVariable par : otherMethod.getParameters()) {
-                if (!hasParameter(par.getName())) results.add(
-                        new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+        if (otherMethod == null) {
+            if (!getModifiers().contains(Modifier.PUBLIC) && config.hasWarning(Warning.EXTRA_NON_PRIVATE_METHOD)) {
+                results.add(
+                        new EvaluationResult(Warning.EXTRA_NON_PRIVATE_METHOD, this, other)
                 );
             }
         }
+        else {
+            if (config.hasWarning(Warning.NOT_FOLLOWING_UML)) {
+                for (JavaVariable par : getParameters()) {
+                    if (!otherMethod.hasParameter(par.getName())) results.add(
+                            new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                    );
+                }
 
-        // this actually checks all modifiers right now, so it should be tuned to be more specific in the future.
-        if (config.hasWarning(Warning.INCORRECT_PRIVACY_METHOD)) {
-            if (!modifiers.equals(otherMethod.getModifiers())) results.add(
-                    new EvaluationResult(Warning.INCORRECT_PRIVACY_METHOD, this, other)
-            );
+                for (JavaVariable par : otherMethod.getParameters()) {
+                    if (!hasParameter(par.getName())) results.add(
+                            new EvaluationResult(Warning.NOT_FOLLOWING_UML, this, other)
+                    );
+                }
+            }
+
+            // this actually checks all modifiers right now, so it should be tuned to be more specific in the future.
+            if (config.hasWarning(Warning.INCORRECT_PRIVACY_METHOD)) {
+                if (!modifiers.equals(otherMethod.getModifiers())) results.add(
+                        new EvaluationResult(Warning.INCORRECT_PRIVACY_METHOD, this, other)
+                );
+            }
         }
 
         return results;

@@ -43,7 +43,7 @@ public class DataWriter extends DataConstants {
         userJson.put(USER_LAST_MY_CODE, user.getLastMyCodePath());
         try {
             FileWriter writer = new FileWriter(JSON_DIR_PATH + USER_FILE_NAME);
-            writer.write(userJson.toString());
+            writer.write(userJson.toString(JSON_INDENT));
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();

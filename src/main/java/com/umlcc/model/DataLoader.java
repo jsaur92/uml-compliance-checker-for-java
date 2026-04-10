@@ -310,9 +310,8 @@ public class DataLoader extends DataConstants {
             String lastUml = (String) userJson.get(USER_LAST_UML);
             String lastMyCode = (String) userJson.get(USER_LAST_MY_CODE);
             user = new User(type, lastUml, lastMyCode);
-        } catch (Exception e) {
+        } catch (Exception ignore) {
             user = new User(UserType.BASIC, "", "");
-            e.printStackTrace();
         }
         return user;
     }
@@ -334,8 +333,7 @@ public class DataLoader extends DataConstants {
                 warningMessages.put( Warning.valueOf((String) wm.get(CONFIG_WARNINGS_WARNING)),
                                      (String) wm.get(CONFIG_WARNINGS_MESSAGE) );
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         }
         return warningMessages;
     }

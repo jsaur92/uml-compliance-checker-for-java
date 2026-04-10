@@ -9,7 +9,7 @@ public class Tester {
 
     public static void main(String[] args) {
         app = ComplianceCheckerApplication.getInstance();
-
+        test4();
         app.close();
     }
 
@@ -35,8 +35,10 @@ public class Tester {
 
     public static void test4() {
         app.loadUmlDataByUmlcc("state.umlcc");
-        ArrayList<String> s = app.checkCompliance("/media/jsaur/Storage/Class/SCHC-497/DPA-student-tests/design-patterns/state");
-        System.out.println(s);
+        ArrayList<String> results = app.checkCompliance("/media/jsaur/Storage/Class/SCHC-497/DPA-student-tests/design-patterns/state");
+        for (String s : results) {
+            System.out.println(s);
+        }
     }
 
 
