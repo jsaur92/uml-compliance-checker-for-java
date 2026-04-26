@@ -6,10 +6,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Class for statically loading in JSON data and Java project repositories.
@@ -27,7 +24,7 @@ public class DataLoader extends DataConstants {
             File rootDir = new File(rootname);
             ArrayList<UserFile> files = new ArrayList<UserFile>();
             ArrayList<Directory> dirs = new ArrayList<Directory>();
-            for (File f : rootDir.listFiles()) {
+            for (File f : Objects.requireNonNull(rootDir.listFiles())) {
                 if (f.isDirectory()) {
                     dirs.add( loadRepo(f.getPath()));
                 }
@@ -134,7 +131,7 @@ public class DataLoader extends DataConstants {
      * @return the Directory.
      */
     public static Directory loadUmlcc(String pathname) {
-        File umlccFile = new File(UMLCC_DIR_PATH + pathname);
+        File umlccFile = new File(pathname);
         String dirText = "";
         try {
             Scanner scanner = new Scanner(umlccFile);

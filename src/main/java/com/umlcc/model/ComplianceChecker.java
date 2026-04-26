@@ -38,6 +38,7 @@ public class ComplianceChecker {
      * @return true if successful.
      */
     public boolean loadUmlDataByRepo(String rootname) {
+        if (!new File(rootname).exists()) return false;
         umlData = DataLoader.loadRepo(rootname);
         return true;
     }
@@ -48,6 +49,7 @@ public class ComplianceChecker {
      * @return true if successful.
      */
     public boolean loadUmlDataByUmlcc(String pathname) {
+        if (!new File(pathname).exists()) return false;
         umlData = DataLoader.loadUmlcc(pathname);
         return true;
     }

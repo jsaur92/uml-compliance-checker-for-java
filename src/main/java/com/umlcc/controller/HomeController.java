@@ -1,53 +1,43 @@
 package com.umlcc.controller;
 
+import com.umlcc.model.ComplianceCheckerApplication;
+import com.umlcc.model.Directory;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.Toolkit;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
 
 public class HomeController {
-    @FXML
-    private Button openLocalTemplate;
-    @FXML
-    private Button openLocalTarget;
-    @FXML
-    private Button cloneTarget;
-    @FXML
-    private Button generateUmlccFile;
-    @FXML
-    private Label templateLabel;
+    @FXML private VBox root;
+    @FXML private HBox templateBox;
+    @FXML private Label templateLabel;
+    @FXML private TextField templateText;
+    @FXML private Button templateRepoButton;
+    @FXML private TextField targetText;
+    @FXML private TextArea outputText;
 
-    final private double basicViewOpenLocalY = 161;
-    final private double adminViewOpenLocalY = 127;
     private boolean adminView = true;
+    private ComplianceCheckerApplication app;
 
     @FXML
-    protected void onOpenLocalTemplateRepoClick() {
-        System.out.println("Open Local Template Repo");
-    }
-
-    @FXML
-    protected void onOpenUmlccFileClick() {
-        System.out.println("Open .umlcc file");
-    }
-
-    @FXML
-    protected void onOpenLocalTargetRepoClick() {
-        System.out.println("Open Local Target Repo");
-    }
-
-    @FXML
-    protected void onCloneTargetRepoClick() {
-        System.out.println("Clone and Open Template Repo");
-    }
-
-    @FXML
-    protected void onGenerateUmlccClick() {
-        System.out.println("Generate .umlcc File");
-    }
-
-    @FXML
-    protected void onRunCheckerClick() {
-        System.out.println("Run Compliance Checker");
+    public void initialize() {
+        updateLayout();
+        app = ComplianceCheckerApplication.getInstance();
     }
 
     @FXML
@@ -56,27 +46,120 @@ public class HomeController {
     }
 
     @FXML
-    protected void toggleView() {
-        if (adminView)
-            setBasicView();
-        else
-            setAdminView();
-        adminView = !adminView;
+    protected void onTemplateFileClick() {
+        String path = loadUmlccFile();
+        templateText.setText(path);
     }
 
-    protected void setBasicView() {
-        openLocalTemplate.setVisible(false);
-        cloneTarget.setVisible(false);
-        generateUmlccFile.setVisible(false);
-        openLocalTarget.setLayoutY(basicViewOpenLocalY);
-        templateLabel.setText("Template File");
+    @FXML
+    protected void onTemplateRepoClick() {
+        String path = loadTemplateRepo();
+        templateText.setText(path);
     }
 
-    protected void setAdminView() {
-        openLocalTemplate.setVisible(true);
-        cloneTarget.setVisible(true);
-        generateUmlccFile.setVisible(true);
-        openLocalTarget.setLayoutY(adminViewOpenLocalY);
-        templateLabel.setText("Template Repository / File");
+    @FXML
+    protected void onTemplateGitClick() {
+
     }
+
+    @FXML
+    protected void onTargetRepoClick() {
+        String path = loadTargetRepo();
+        targetText.setText(path);
+    }
+
+    @FXML
+    protected void onTargetGitClick() {
+
+    }
+
+    @FXML
+    protected void onRunCheckerClick() {
+        File f = new File(targetText.getText());
+        if (f.exists()) {
+            if (templateText.getText().endsWith(".umlcc")) {
+                app.loadUmlDataByUmlcc(templateText.getText());
+            } else {
+                app.loadUmlDataByRepo(templateText.getText());
+            }
+            ArrayList<String> results = app.checkCompliance(targetText.getText());
+            StringBuilder s = new StringBuilder();
+            for (String r : results) {
+                s.append(r).append("\n");
+            }
+            outputText.setText(s.toString());
+        }
+    }
+
+    @FXML
+    protected void onGenerateUmlccClick() {
+        System.out.println("Generate .umlcc File");
+    }
+
+    @FXML
+    protected void onOutputTextClick() {
+        System.out.println("attempt copy");
+        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection data = new StringSelection(outputText.getText());
+        cb.setContents(data, null);
+    }
+
+    protected void updateLayout() {
+        if (adminView) {
+            templateLabel.setText("Template Repository / File");
+            if (! templateBox.getChildren().contains(templateRepoButton)) templateBox.getChildren().add(templateRepoButton);
+        } else {
+            templateLabel.setText("Template File");
+            templateBox.getChildren().remove(templateRepoButton);
+        }
+    }
+
+    private String loadUmlccFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Template File");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("UMLCC Template Files", "*.umlcc")
+        );
+
+        Scene scene = root.getScene();
+        if (scene == null) return "";
+
+        Stage stage = (Stage) scene.getWindow();
+        File file = fileChooser.showOpenDialog(stage);
+
+        if (file == null) return "";
+
+        return file.getAbsolutePath();
+    }
+
+    private String loadTemplateRepo() {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle("Open Template Repository");
+
+        Scene scene = root.getScene();
+        if (scene == null) return "";
+
+        Stage stage = (Stage) scene.getWindow();
+        File file = dirChooser.showDialog(stage);
+
+        if (file == null) return "";
+
+        return file.getAbsolutePath();
+    }
+
+    private String loadTargetRepo() {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle("Open Target Repository");
+
+        Scene scene = root.getScene();
+        if (scene == null) return "";
+
+        Stage stage = (Stage) scene.getWindow();
+        File file = dirChooser.showDialog(stage);
+
+        if (file == null) return "";
+        return file.getAbsolutePath();
+    }
+
+
 }
