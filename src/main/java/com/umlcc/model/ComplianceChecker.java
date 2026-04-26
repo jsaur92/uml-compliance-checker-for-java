@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class ComplianceChecker {
     private static ComplianceChecker complianceChecker;
     private Directory umlData;
+    private String path;
 
     /**
      * Constructor for the ComplianceChecker class.
@@ -38,8 +39,9 @@ public class ComplianceChecker {
      * @return true if successful.
      */
     public boolean loadUmlDataByRepo(String rootname) {
-        if (!new File(rootname).exists()) return false;
+        if (rootname == null || !new File(rootname).exists()) return false;
         umlData = DataLoader.loadRepo(rootname);
+        path = rootname;
         return true;
     }
 
@@ -49,8 +51,9 @@ public class ComplianceChecker {
      * @return true if successful.
      */
     public boolean loadUmlDataByUmlcc(String pathname) {
-        if (!new File(pathname).exists()) return false;
+        if (pathname == null || !new File(pathname).exists()) return false;
         umlData = DataLoader.loadUmlcc(pathname);
+        path = pathname;
         return true;
     }
 
@@ -79,5 +82,14 @@ public class ComplianceChecker {
             output.add(result.toString());
         }
         return output;
+    }
+
+    /**
+     * Accessor method for path.
+     * @return the absolute path on the device's drive to the file or repo
+     * used as the template for this ComplianceChecker.
+     */
+    public String getPath() {
+        return path;
     }
 }

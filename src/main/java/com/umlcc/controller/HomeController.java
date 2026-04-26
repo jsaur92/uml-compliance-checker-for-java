@@ -2,6 +2,8 @@ package com.umlcc.controller;
 
 import com.umlcc.model.ComplianceCheckerApplication;
 import com.umlcc.model.Directory;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,15 +12,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.*;
 
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.Toolkit;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -36,8 +37,9 @@ public class HomeController {
 
     @FXML
     public void initialize() {
-        updateLayout();
         app = ComplianceCheckerApplication.getInstance();
+        updateLayout();
+        Platform.runLater( () -> root.requestFocus() );
     }
 
     @FXML
@@ -54,35 +56,43 @@ public class HomeController {
     @FXML
     protected void onTemplateRepoClick() {
         String path = loadTemplateRepo();
-        templateText.setText(path);
+        if (!path.isEmpty()) templateText.setText(path);
     }
 
     @FXML
     protected void onTemplateGitClick() {
-
+        openGitPopup(() -> {
+            File f = new File(GitPopupController.getPath());
+            if (!GitPopupController.getPath().isEmpty() && f.exists() && f.isDirectory()) {
+                app.loadUmlDataByRepo(GitPopupController.getPath());
+                updateLayout();
+            }
+        });
     }
 
     @FXML
     protected void onTargetRepoClick() {
         String path = loadTargetRepo();
-        targetText.setText(path);
+        if (!path.isEmpty()) targetText.setText(path);
     }
 
     @FXML
     protected void onTargetGitClick() {
-
+        openGitPopup(() -> {
+            targetText.setText(GitPopupController.getPath());
+        });
     }
 
     @FXML
     protected void onRunCheckerClick() {
-        File f = new File(targetText.getText());
+        File f = new File(getTargetPath());
         if (f.exists()) {
-            if (templateText.getText().endsWith(".umlcc")) {
-                app.loadUmlDataByUmlcc(templateText.getText());
+            if (getTemplatePath().endsWith(".umlcc")) {
+                app.loadUmlDataByUmlcc(getTemplatePath());
             } else {
-                app.loadUmlDataByRepo(templateText.getText());
+                app.loadUmlDataByRepo(getTemplatePath());
             }
-            ArrayList<String> results = app.checkCompliance(targetText.getText());
+            ArrayList<String> results = app.checkCompliance(getTargetPath());
             StringBuilder s = new StringBuilder();
             for (String r : results) {
                 s.append(r).append("\n");
@@ -98,13 +108,18 @@ public class HomeController {
 
     @FXML
     protected void onOutputTextClick() {
-        System.out.println("attempt copy");
-        Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection data = new StringSelection(outputText.getText());
-        cb.setContents(data, null);
+        // Some users may get an error regarding X11 if they do not have
+        // Code is disabled anyway so that users are not confused by the inconsistency.
+
+//        if (System.getProperty("java.awt.headless").equals("true")) {
+//            Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+//            StringSelection data = new StringSelection(outputText.getText());
+//            cb.setContents(data, null);
+//        }
     }
 
     protected void updateLayout() {
+        templateText.setText(app.getUmlDataPath());
         if (adminView) {
             templateLabel.setText("Template Repository / File");
             if (! templateBox.getChildren().contains(templateRepoButton)) templateBox.getChildren().add(templateRepoButton);
@@ -120,6 +135,7 @@ public class HomeController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("UMLCC Template Files", "*.umlcc")
         );
+        ControllerUtil.setInitialDirectory(fileChooser, getTemplatePath());
 
         Scene scene = root.getScene();
         if (scene == null) return "";
@@ -135,6 +151,7 @@ public class HomeController {
     private String loadTemplateRepo() {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Open Template Repository");
+        ControllerUtil.setInitialDirectory(dirChooser, getTemplatePath());
 
         Scene scene = root.getScene();
         if (scene == null) return "";
@@ -150,6 +167,7 @@ public class HomeController {
     private String loadTargetRepo() {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Open Target Repository");
+        ControllerUtil.setInitialDirectory(dirChooser, getTemplatePath());
 
         Scene scene = root.getScene();
         if (scene == null) return "";
@@ -159,6 +177,38 @@ public class HomeController {
 
         if (file == null) return "";
         return file.getAbsolutePath();
+    }
+
+    private void openGitPopup(Runnable onClose) {
+        Stage mainStage = (Stage) root.getScene().getWindow();
+        Stage popupStage = new Stage();
+        popupStage.setTitle("Pull from Remote Repo");
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.initOwner(mainStage);
+
+        Scene scene = null;
+        try {
+            scene = new Scene(UmlccApplication.loadFXML("git_popup"), root.getWidth()*0.8, root.getHeight()*0.8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        popupStage.setScene(scene);
+        // modified from https://stackoverflow.com/questions/12153622/how-to-close-a-javafx-application-on-window-close
+        popupStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                onClose.run();
+            }
+        });
+        popupStage.showAndWait();
+    }
+
+    private String getTemplatePath() {
+        return templateText.getText();
+    }
+
+    private String getTargetPath() {
+        return targetText.getText();
     }
 
 

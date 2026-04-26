@@ -70,12 +70,12 @@
                   <Tooltip text="Pick template from a .umlcc file" />
                </tooltip>
             </Button>
-            <Button fx:id="templateRepoButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onTargetRepoClick" prefHeight="32.0" prefWidth="32.0">
+            <Button fx:id="templateRepoButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onTemplateRepoClick" prefHeight="32.0" prefWidth="32.0">
                <font>
                   <Font name="FreeSans" size="13.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="26.0" fitWidth="26.0" onMouseClicked="#onTemplateRepoClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../images/file_icon_240px.png" />
                      </image>
@@ -115,7 +115,7 @@
                   <Font name="FreeSans" size="13.0" />
                </font>
                <graphic>
-                  <ImageView fitHeight="26.0" fitWidth="26.0" onMouseClicked="#onTargetRepoClick" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../images/file_icon_240px.png" />
                      </image>
@@ -154,9 +154,6 @@
          <VBox.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </VBox.margin>
-         <tooltip>
-            <Tooltip text="Click to copy text" />
-         </tooltip>
       </TextArea>
    </children>
 </VBox>

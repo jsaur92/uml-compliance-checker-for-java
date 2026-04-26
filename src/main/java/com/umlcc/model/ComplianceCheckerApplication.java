@@ -94,6 +94,15 @@ public class ComplianceCheckerApplication {
     }
 
     /**
+     * Accessor method for path.
+     * @return the absolute path on the device's drive to the file or repo
+     * used as the template for this ComplianceChecker.
+     */
+    public String getUmlDataPath() {
+        return complianceChecker.getPath();
+    }
+
+    /**
      * Reset the current umlData to be null.
      * @return true if successful.
      */
