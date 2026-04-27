@@ -23,4 +23,9 @@ public class UmlccApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(UmlccApplication.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
+
+    public static void changeScene(String fxml) throws IOException {
+        Parent p = UmlccApplication.loadFXML(fxml);
+        scene.setRoot(p);
+    }
 }

@@ -2,9 +2,11 @@ package com.umlcc.controller;
 
 import com.umlcc.model.ComplianceCheckerApplication;
 import com.umlcc.model.Directory;
+import com.umlcc.model.UserType;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,22 +31,24 @@ public class HomeController {
     @FXML private Label templateLabel;
     @FXML private TextField templateText;
     @FXML private Button templateRepoButton;
+    @FXML private Button templateRemoteGitButton;
     @FXML private TextField targetText;
     @FXML private TextArea outputText;
 
-    private boolean adminView = true;
+    private boolean adminView = false;
     private ComplianceCheckerApplication app;
 
     @FXML
     public void initialize() {
         app = ComplianceCheckerApplication.getInstance();
+        adminView = app.getUserType() != UserType.BASIC;
         updateLayout();
         Platform.runLater( () -> root.requestFocus() );
     }
 
     @FXML
-    protected void onSettingsClick() {
-        System.out.println("Open Settings");
+    protected void onSettingsClick() throws IOException {
+        UmlccApplication.changeScene("config");
     }
 
     @FXML
@@ -123,9 +127,11 @@ public class HomeController {
         if (adminView) {
             templateLabel.setText("Template Repository / File");
             if (! templateBox.getChildren().contains(templateRepoButton)) templateBox.getChildren().add(templateRepoButton);
+            if (! templateBox.getChildren().contains(templateRemoteGitButton)) templateBox.getChildren().add(templateRemoteGitButton);
         } else {
             templateLabel.setText("Template File");
             templateBox.getChildren().remove(templateRepoButton);
+            templateBox.getChildren().remove(templateRemoteGitButton);
         }
     }
 
