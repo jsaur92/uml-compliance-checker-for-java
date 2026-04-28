@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class UmlccApplication extends Application {
     private static Scene scene;
@@ -25,7 +26,10 @@ public class UmlccApplication extends Application {
     }
 
     public static void changeScene(String fxml) throws IOException {
-        Parent p = UmlccApplication.loadFXML(fxml);
-        scene.setRoot(p);
+        scene.setRoot(loadFXML(fxml));
+    }
+
+    public static Scene getScene() {
+        return scene;
     }
 }

@@ -167,6 +167,14 @@ public class ComplianceCheckerApplication {
     }
 
     /**
+     * Accessor method for config.
+     * @return the config instance.
+     */
+    public Config getConfig() {
+        return config;
+    }
+
+    /**
      * Set the configuration data.
      * @param warningMessages the warning messages for the config file.
      * @return true if changed, false otherwise.
