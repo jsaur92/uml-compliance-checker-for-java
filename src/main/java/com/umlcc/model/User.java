@@ -9,6 +9,9 @@ public class User {
     private UserType userType;
     private String lastUmlDataPath;
     private String lastMyCodePath;
+    private String defaultCloneParent;
+    private boolean deleteClonedOnClose;
+    private CloneIntoPattern cloneIntoPattern;
 
     /**
      * Constructor for a new User class.
@@ -18,6 +21,9 @@ public class User {
         this.userType = userType;
         this.lastUmlDataPath = "";
         this.lastMyCodePath = "";
+        this.defaultCloneParent = "";
+        this.deleteClonedOnClose = false;
+        this.cloneIntoPattern = CloneIntoPattern.NONE;
     }
 
     /**
@@ -26,10 +32,15 @@ public class User {
      * @param lastUmlDataPath the filepath for last session's UML Data path.
      * @param lastMyCodePath the filepath for last session's My Code path.
      */
-    public User(UserType userType, String lastUmlDataPath, String lastMyCodePath) {
+    public User(UserType userType, String lastUmlDataPath,
+                String lastMyCodePath, String defaultCloneParent,
+                boolean deleteClonedOnClose, CloneIntoPattern cloneIntoPattern) {
         this.userType = userType;
         this.lastUmlDataPath = lastUmlDataPath;
         this.lastMyCodePath = lastMyCodePath;
+        this.defaultCloneParent = defaultCloneParent;
+        this.deleteClonedOnClose = deleteClonedOnClose;
+        this.cloneIntoPattern = cloneIntoPattern;
     }
 
     /**
@@ -68,6 +79,32 @@ public class User {
     }
 
     /**
+     * Accessor method for the user's default directory for cloning repos into.
+     * @return the user's default clone-into directory filepath.
+     */
+    public String getDefaultCloneParent() {
+        return defaultCloneParent;
+    }
+
+    /**
+     * Accessor method for whether the user wants to delete all cloned files
+     * on close or not.
+     * @return true if the user wants their cloned files deleted on close,
+     * false otherwise.
+     */
+    public boolean getDeleteClonedOnClose() {
+        return deleteClonedOnClose;
+    }
+
+    /**
+     * Accessor method for the user's CloneIntoPattern.
+     * @return the user's CloneIntoPattern.
+     */
+    public CloneIntoPattern getCloneIntoPattern() {
+        return cloneIntoPattern;
+    }
+
+    /**
      * Mutator method for the user's last UML Data filepath.
      */
     public void setLastUmlDataPath(String lastUmlDataPath) {
@@ -79,5 +116,28 @@ public class User {
      */
     public void setLastMyCodePath(String lastMyCodePath) {
         this.lastMyCodePath = lastMyCodePath;
+    }
+
+    /**
+     * Mutator method for the user's default repo to clone projects into's
+     * filepath.
+     */
+    public void setDefaultCloneParent(String defaultCloneParent) {
+        this.defaultCloneParent = defaultCloneParent;
+    }
+
+    /**
+     * Mutator method for the user's preference for file deletion on close.
+     */
+    public void setDeleteClonedOnClose(boolean deleteClonedOnClose) {
+        this.deleteClonedOnClose = deleteClonedOnClose;
+    }
+
+    /**
+     * Mutator method for the user's CloneIntoPattern.
+     * @param cloneIntoPattern the user's CloneIntoPattern.
+     */
+    public void setCloneIntoPattern(CloneIntoPattern cloneIntoPattern) {
+        this.cloneIntoPattern = cloneIntoPattern;
     }
 }

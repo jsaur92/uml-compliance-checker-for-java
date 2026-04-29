@@ -66,6 +66,85 @@ public class ComplianceCheckerApplication {
     }
 
     /**
+     * Accessor method for the user's last UML Data filepath.
+     * @return the user's last UML Data filepath.
+     */
+    public String getLastUmlDataPath() {
+        return user.getLastUmlDataPath();
+    }
+
+    /**
+     * Accessor method for the user's last My Code filepath.
+     * @return the user's last My Code filepath.
+     */
+    public String getLastMyCodePath() {
+        return user.getLastMyCodePath();
+    }
+
+    /**
+     * Accessor method for the user's default directory for cloning repos into.
+     * @return the user's default clone-into directory filepath.
+     */
+    public String getDefaultCloneParent() {
+        return user.getDefaultCloneParent();
+    }
+
+    /**
+     * Accessor method for whether the user wants to delete all cloned files
+     * on close or not.
+     * @return true if the user wants their cloned files deleted on close,
+     * false otherwise.
+     */
+    public boolean getDeleteClonedOnClose() {
+        return user.getDeleteClonedOnClose();
+    }
+
+    /**
+     * Accessor method for the user's CloneIntoPattern.
+     * @return the user's CloneIntoPattern.
+     */
+    public CloneIntoPattern getCloneIntoPattern() {
+        return user.getCloneIntoPattern();
+    }
+
+    /**
+     * Mutator method for the user's last UML Data filepath.
+     */
+    public void setLastUmlDataPath(String lastUmlDataPath) {
+        user.setLastUmlDataPath(lastUmlDataPath);
+    }
+
+    /**
+     * Mutator method for the user's last My Code filepath.
+     */
+    public void setLastMyCodePath(String lastMyCodePath) {
+        user.setLastMyCodePath(lastMyCodePath);
+    }
+
+    /**
+     * Mutator method for the user's default repo to clone projects into's
+     * filepath.
+     */
+    public void setDefaultCloneParent(String defaultCloneParent) {
+        user.setDefaultCloneParent(defaultCloneParent);
+    }
+
+    /**
+     * Mutator method for the user's preference for file deletion on close.
+     */
+    public void setDeleteClonedOnClose(boolean deleteClonedOnClose) {
+        user.setDeleteClonedOnClose(deleteClonedOnClose);
+    }
+
+    /**
+     * Mutator method for the user's CloneIntoPattern.
+     * @param cloneIntoPattern the user's CloneIntoPattern.
+     */
+    public void setCloneIntoPattern(CloneIntoPattern cloneIntoPattern) {
+        user.setCloneIntoPattern(cloneIntoPattern);
+    }
+
+    /**
      * Save a directory as a .umlcc file to the umlcc directory.
      * @param dir the directory to save.
      * @return true if saving successful, false otherwise.

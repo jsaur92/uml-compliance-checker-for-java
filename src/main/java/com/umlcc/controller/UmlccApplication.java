@@ -1,6 +1,8 @@
 package com.umlcc.controller;
 
+import com.umlcc.model.ComplianceCheckerApplication;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,6 +20,11 @@ public class UmlccApplication extends Application {
         scene = new Scene(loadFXML("home"), 600, 400);
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest(event -> {
+            ComplianceCheckerApplication app = ComplianceCheckerApplication.getInstance();
+            app.close();
+        });
     }
 
     public static Parent loadFXML(String fxml) throws IOException {

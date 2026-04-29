@@ -303,12 +303,16 @@ public class DataLoader extends DataConstants {
             Scanner sourceScanner = new Scanner(new File(JSON_DIR_PATH + USER_FILE_NAME));
             while (sourceScanner.hasNext()) source += sourceScanner.nextLine() + DELIMITER_NEWLINE;
             JSONObject userJson = new JSONObject(source);
-            UserType type = (UserType) userJson.get(USER_TYPE);
+            UserType type = UserType.fromString((String) userJson.get(USER_TYPE));
             String lastUml = (String) userJson.get(USER_LAST_UML);
             String lastMyCode = (String) userJson.get(USER_LAST_MY_CODE);
-            user = new User(type, lastUml, lastMyCode);
-        } catch (Exception ignore) {
-            user = new User(UserType.BASIC, "", "");
+            String defaultParent = (String) userJson.get(USER_DEFAULT_CLONE);
+            boolean deleteClones = (boolean) userJson.get(USER_DELETE_CLONED);
+            CloneIntoPattern pattern = CloneIntoPattern.fromString((String) userJson.get(USER_CLONE_PATTERN));
+            user = new User(type, lastUml, lastMyCode, defaultParent, deleteClones, pattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            user = new User(UserType.BASIC);
         }
         return user;
     }

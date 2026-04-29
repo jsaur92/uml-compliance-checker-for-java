@@ -10,6 +10,9 @@ public abstract class DataConstants {
     protected final static String USER_TYPE = "userType";
     protected final static String USER_LAST_UML = "lastUmlDataPath";
     protected final static String USER_LAST_MY_CODE = "lastMyCodePath";
+    protected final static String USER_DEFAULT_CLONE = "defaultCloneParent";
+    protected final static String USER_DELETE_CLONED = "deleteClonedOnClose";
+    protected final static String USER_CLONE_PATTERN = "clonePattern";
     protected final static String CONFIG_FILE_NAME = "config.json";
     protected final static String CONFIG_WARNINGS = "warnings";
     protected final static String CONFIG_WARNINGS_WARNING = "warning";

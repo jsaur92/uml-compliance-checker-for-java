@@ -41,6 +41,9 @@ public class DataWriter extends DataConstants {
         userJson.put(USER_TYPE, user.getUserType());
         userJson.put(USER_LAST_UML, user.getLastUmlDataPath());
         userJson.put(USER_LAST_MY_CODE, user.getLastMyCodePath());
+        userJson.put(USER_DEFAULT_CLONE, user.getDefaultCloneParent());
+        userJson.put(USER_DELETE_CLONED, user.getDeleteClonedOnClose());
+        userJson.put(USER_CLONE_PATTERN, user.getCloneIntoPattern());
         try {
             FileWriter writer = new FileWriter(JSON_DIR_PATH + USER_FILE_NAME);
             writer.write(userJson.toString(JSON_INDENT));

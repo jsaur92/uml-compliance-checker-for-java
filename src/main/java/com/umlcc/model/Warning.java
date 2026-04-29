@@ -16,5 +16,19 @@ public enum Warning {
     MISSING_FILE,
     EXTRA_FILE,
     INDENTATION_ISSUES,
-    SPACING_ISSUES,
+    SPACING_ISSUES;
+
+    /**
+     * Input a String, output a UserType matching that String.
+     * @param s the String to match.
+     * @return the UserType that matches.
+     */
+    public static Warning fromString(String s) {
+        for (Warning warning : values()) {
+            if (warning.name().equalsIgnoreCase(s)) {
+                return warning;
+            }
+        }
+        return null;
+    }
 }

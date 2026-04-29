@@ -1,5 +1,8 @@
 {
   "lastMyCodePath": "",
+  "clonePattern": "NONE",
+  "defaultCloneParent": "",
+  "deleteClonedOnClose": false,
   "userType": "BASIC",
   "lastUmlDataPath": ""
 }
