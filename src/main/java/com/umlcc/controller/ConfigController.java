@@ -1,9 +1,6 @@
 package com.umlcc.controller;
 
-import com.umlcc.model.CloneIntoPattern;
-import com.umlcc.model.ComplianceCheckerApplication;
-import com.umlcc.model.UserType;
-import com.umlcc.model.Warning;
+import com.umlcc.model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -19,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -44,6 +42,7 @@ public class ConfigController {
     // (adjusted a little lower to account for the scrollbar itself)
     private final double compWidthMargin = 36;
     private final String hideGUBUser = "Basic";
+    private final String umlccFileDir = "umlcc/";
     private ArrayList<ComplianceGridRow> gridRows = new ArrayList<ComplianceGridRow>();
     private ComplianceCheckerApplication app;
 
@@ -89,7 +88,8 @@ public class ConfigController {
 
     @FXML
     private void onUmlClick(MouseEvent event) {
-
+        String path = pickUmlccExportPath();
+        app.saveAsUmlccFile( app.loadRepo(path) );
     }
 
     @FXML
@@ -233,6 +233,22 @@ public class ConfigController {
             }
         }
         app.setConfig(warnings);
+    }
+
+    private String pickUmlccExportPath() {
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        dirChooser.setTitle("Choose root directory of project to export as .umlcc");
+        ControllerUtil.setInitialDirectory(dirChooser, umlccFileDir);
+
+        Scene scene = root.getScene();
+        if (scene == null) return "";
+
+        Stage stage = (Stage) scene.getWindow();
+        File file = dirChooser.showDialog(stage);
+
+        if (file == null) return "";
+
+        return file.getAbsolutePath();
     }
 
 }

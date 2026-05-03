@@ -61,7 +61,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onTemplateFileClick" prefHeight="32.0" prefWidth="32.0">
+                  <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onUmlClick" prefHeight="32.0" prefWidth="32.0">
                      <font>
                         <Font name="FreeSans" size="13.0" />
                      </font>

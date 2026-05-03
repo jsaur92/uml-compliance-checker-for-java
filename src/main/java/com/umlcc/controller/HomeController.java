@@ -106,11 +106,6 @@ public class HomeController {
     }
 
     @FXML
-    protected void onGenerateUmlccClick() {
-        System.out.println("Generate .umlcc File");
-    }
-
-    @FXML
     protected void onOutputTextClick() {
         // Some users may get an error regarding X11 if they do not have
         // Code is disabled anyway so that users are not confused by the inconsistency.

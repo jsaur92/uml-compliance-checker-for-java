@@ -165,6 +165,15 @@ public class ComplianceCheckerApplication {
     }
 
     /**
+     * Load a Directory containing all the data from a real Java project repository.
+     * @param rootname the root of the file
+     * @return the Directory.
+     */
+    public Directory loadRepo(String rootname) {
+        return DataLoader.loadRepo(rootname);
+    }
+
+    /**
      * Load a Directory containing all the data from a real Java project
      * repository into the ComplianceChecker instance.
      * @param rootname the root of the file
