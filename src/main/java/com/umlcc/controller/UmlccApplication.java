@@ -12,12 +12,19 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class UmlccApplication extends Application {
+    private final static int minWidth = 480;
+    private final static int minHeight = 360;
+    private final static int defaultWidth = 600;
+    private final static int defaultHeight = 400;
+
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("UML Compliance Checker for Java");
-        scene = new Scene(loadFXML("home"), 600, 400);
+        stage.setMinWidth(minWidth);
+        stage.setMinHeight(minHeight);
+        scene = new Scene(loadFXML("home"), defaultWidth, defaultHeight);
         stage.setScene(scene);
         stage.show();
 

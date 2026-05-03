@@ -68,7 +68,7 @@ public class DataWriter extends DataConstants {
         JSONArray wmsArray= new JSONArray();
         for (Warning key : warningMessages.keySet()) {
             JSONObject wm = new JSONObject();
-            wm.put(CONFIG_WARNINGS_WARNING, key.toString());
+            wm.put(CONFIG_WARNINGS_WARNING, key.getName());
             wm.put(CONFIG_WARNINGS_MESSAGE, warningMessages.get(key));
             wmsArray.put(wm);
         }

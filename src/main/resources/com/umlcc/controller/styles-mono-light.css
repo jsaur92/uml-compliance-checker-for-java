@@ -1,0 +1,8 @@
+.root {
+    -fx-base: #fefefe;
+    -fx-font-family: "Monospace";
+}
+
+.image-view {
+    -fx-effect: innershadow( three-pass-box, rgba( 0, 0, 0, 1 ), 127, 1, 0, 0 );
+}

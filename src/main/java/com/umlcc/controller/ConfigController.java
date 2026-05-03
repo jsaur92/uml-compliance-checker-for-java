@@ -132,6 +132,7 @@ public class ConfigController {
 
         updateUmlccButtonVis();
         updateComplianceWarnings();
+        updateComplianceWidth();
     }
 
     private void updateComplianceWidth() {
@@ -155,7 +156,7 @@ public class ConfigController {
         }
     }
 
-    // returns array of all the content in a row of the compliance warnings grid.s
+    // returns array of all the content in a row of the compliance warnings grid.
     private ComplianceGridRow compWarningRow(int rowIndex, String warning, boolean active, String results) {
         Label text = new Label(warning);
         GridPane.setRowIndex(text, rowIndex);

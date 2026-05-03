@@ -1,0 +1,8 @@
+.root {
+    -fx-base: #000000;
+    -fx-font-family: "sans-serif";
+}
+
+.button {
+    -fx-base: #fefefe;
+}

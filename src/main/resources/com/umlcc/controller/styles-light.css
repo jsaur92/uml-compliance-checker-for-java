@@ -1,0 +1,12 @@
+.root {
+    -fx-base: #ffffff;
+    -fx-font-family: "sans-serif";
+}
+
+.button {
+    -fx-base: #0e0e0e;
+}
+
+.image-view {
+    -fx-effect: innershadow( three-pass-box, rgba( 0, 0, 0, 1 ), 127, 1, 0, 0 );
+}

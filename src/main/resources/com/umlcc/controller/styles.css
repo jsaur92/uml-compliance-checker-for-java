@@ -1,0 +1,29 @@
+.root {
+    -fx-base: #000000;
+    -fx-font-family: "sans-serif";
+}
+
+.button {
+    -fx-base: #86d961;
+    -fx-text-fill: #000000;
+}
+
+.text-field {
+    -fx-background-color: #316133;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #222222;
+    -fx-highlight-fill: #90ff1e;
+    -fx-highlight-text-fill: #000000;
+}
+
+.text-area .content{
+    -fx-background-color: #316133;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #222222;
+    -fx-highlight-fill: #90ff1e;
+    -fx-highlight-text-fill: #000000;
+}
+
+.image-view {
+    -fx-effect: innershadow( three-pass-box, rgba( 0, 0, 0, 1 ), 127, 1, 0, 0 );
+}

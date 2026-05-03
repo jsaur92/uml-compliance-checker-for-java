@@ -331,7 +331,7 @@ public class DataLoader extends DataConstants {
             JSONArray wmArray = (JSONArray) configJson.get(CONFIG_WARNINGS);
             for (Object obj : wmArray) {
                 JSONObject wm = (JSONObject) obj;
-                warningMessages.put( Warning.valueOf((String) wm.get(CONFIG_WARNINGS_WARNING)),
+                warningMessages.put( Warning.fromString((String) wm.get(CONFIG_WARNINGS_WARNING)),
                                      (String) wm.get(CONFIG_WARNINGS_MESSAGE) );
             }
         } catch (Exception ignore) {
