@@ -91,7 +91,7 @@ public class DataWriter extends DataConstants {
      * @param outputText a StringBuilder representing the output of the commands.
      * @return true if successfully cloned or pulled, false otherwise.
      */
-    public static boolean attemptPullGitRepo(String url, String parentDirPath, StringBuilder outputText) {
+    public static boolean attemptPullGitRepo(String url, String parentDirPath, StringBuffer outputText) {
         String[] commandClone = {
                 "git",
                 "clone",

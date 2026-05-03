@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,19 +35,27 @@ public class GitPopupController {
     @FXML private TextField templateText;
 
     private ComplianceCheckerApplication app;
-    private StringBuilder outputBuilder;
+    private StringBuffer outputBuffer;
 
     @FXML
     private void initialize() {
         app = ComplianceCheckerApplication.getInstance();
         path = "";
-        outputBuilder = new StringBuilder();
+        outputBuffer = new StringBuffer();
         Platform.runLater( () -> root.requestFocus() );
+        TextAreaUpdateTask textUpdate = new TextAreaUpdateTask(outputText, outputBuffer);
+        textUpdate.start();
+        UmlccApplication.getScene().rootProperty().addListener(new ChangeListener<Parent>() {
+            @Override
+            public void changed(ObservableValue<? extends Parent> observableValue, Parent parent, Parent t1) {
+
+            }
+        });
     }
 
     @FXML
     private void onClonePullClick(MouseEvent event) {
-        app.attemptPullGitRepo(targetText.getText(), templateText.getText(), outputBuilder);
+        app.attemptPullGitRepo(targetText.getText(), templateText.getText(), outputBuffer);
     }
 
     @FXML
@@ -75,9 +84,36 @@ public class GitPopupController {
         return file.getAbsolutePath();
     }
 
-
-
     public static String getPath() {
         return path;
+    }
+}
+
+class TextAreaUpdateTask extends Thread {
+    private TextArea textArea;
+    private StringBuffer outputBuffer;
+    private boolean alive;
+    private final static int sleepMilli = 10;
+
+    TextAreaUpdateTask(TextArea textArea, StringBuffer outputBuffer) {
+        this.textArea = textArea;
+        this.outputBuffer = outputBuffer;
+        this.alive = true;
+    }
+
+    public void run() {
+        while(alive) {
+            if (!textArea.getText().contentEquals(outputBuffer))
+                textArea.setText(outputBuffer.toString());
+            try {
+                Thread.sleep(sleepMilli);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void kill() {
+        this.alive = false;
     }
 }

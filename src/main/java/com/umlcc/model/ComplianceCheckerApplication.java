@@ -55,7 +55,7 @@ public class ComplianceCheckerApplication {
      * @param outputText a StringBuilder representing the output of the commands.
      * @return true if successfully cloned or pulled, false otherwise.
      */
-    public boolean attemptPullGitRepo(String url, String parentDirPath, StringBuilder outputText) {
+    public boolean attemptPullGitRepo(String url, String parentDirPath, StringBuffer outputText) {
         return DataWriter.attemptPullGitRepo(url, parentDirPath, outputText);
     }
 
