@@ -2,6 +2,8 @@ package com.umlcc.controller;
 
 import com.umlcc.model.ComplianceCheckerApplication;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -31,61 +33,20 @@ public class GitPopupController {
     @FXML private Button templateRepoButton;
     @FXML private TextField templateText;
 
+    private ComplianceCheckerApplication app;
+    private StringBuilder outputBuilder;
+
     @FXML
     private void initialize() {
+        app = ComplianceCheckerApplication.getInstance();
         path = "";
+        outputBuilder = new StringBuilder();
         Platform.runLater( () -> root.requestFocus() );
     }
 
-    /**
-     * Attempts to clone and pull the desired remote Git repo.
-     * In the future, this should be altered to provide displayed output
-     * into a textfield in the popup much like the output that would be
-     * displayed on a terminal window. It should also try to intelligently
-     * decide whether to use clone or pull based on context.
-     */
     @FXML
     private void onClonePullClick(MouseEvent event) {
-        String[] commandClone = {
-                "git",
-                "clone",
-                targetText.getText(),
-                templateText.getText()
-        };
-        String[] commandPull = {
-                "git",
-                "-C",
-                templateText.getText(),
-                "pull"
-        };
-
-        try {
-            Process procClone = Runtime.getRuntime().exec(commandClone);
-            String cloneOut = getCommandOutput(procClone);
-
-            outputText.appendText("Attempting to clone.\n");
-            outputText.appendText(cloneOut);
-            if (!cloneOut.startsWith("fatal:")) {
-                outputText.appendText("Clone successful.\n");
-            } else {
-                outputText.appendText("Clone failed. Attempting to pull.\n");
-                Process procPull = Runtime.getRuntime().exec(commandPull);
-                String pullOut = getCommandOutput(procPull);
-                outputText.appendText(pullOut);
-                if (!pullOut.startsWith("fatal:")) {
-                    outputText.appendText("Pull successful.\n");
-                } else {
-                    outputText.appendText("Pull failed.\n");
-                    return;
-                }
-            }
-
-            path = templateText.getText();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        app.attemptPullGitRepo(targetText.getText(), templateText.getText(), outputBuilder);
     }
 
     @FXML
@@ -114,30 +75,7 @@ public class GitPopupController {
         return file.getAbsolutePath();
     }
 
-    // modified from https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
-    public String getCommandOutput(Process proc) throws IOException {
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(proc.getInputStream()));
 
-        BufferedReader stdError = new BufferedReader(new
-                InputStreamReader(proc.getErrorStream()));
-
-        String s = "";
-
-        // Read the output from the command
-        String output = null;
-        while ((output = stdInput.readLine()) != null) {
-            s += output + "\n";
-        }
-
-        String error = null;
-        // Read any errors from the attempted command
-        while ((error = stdError.readLine()) != null) {
-            s += error + "\n";
-        }
-
-        return s;
-    }
 
     public static String getPath() {
         return path;

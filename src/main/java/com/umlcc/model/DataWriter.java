@@ -4,7 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
+import java.io.BufferedReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 /**
@@ -79,5 +82,78 @@ public class DataWriter extends DataConstants {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Attempt to pull or clone a Git repo.
+     * @param url the url to the remote Git repo.
+     * @param parentDirPath the path to the directory to clone/pull into.
+     * @param outputText a StringBuilder representing the output of the commands.
+     * @return true if successfully cloned or pulled, false otherwise.
+     */
+    public static boolean attemptPullGitRepo(String url, String parentDirPath, StringBuilder outputText) {
+        String[] commandClone = {
+                "git",
+                "clone",
+                url,
+                parentDirPath
+        };
+        String[] commandPull = {
+                "git",
+                "-C",
+                parentDirPath,
+                "pull"
+        };
+
+        try {
+            Process procClone = Runtime.getRuntime().exec(commandClone);
+            String cloneOut = getCommandOutput(procClone);
+
+            outputText.append("Attempting to clone.\n");
+            outputText.append(cloneOut);
+            if (!cloneOut.startsWith("fatal:")) {
+                outputText.append("Clone successful.\n");
+            } else {
+                outputText.append("Clone failed. Attempting to pull.\n");
+                Process procPull = Runtime.getRuntime().exec(commandPull);
+                String pullOut = getCommandOutput(procPull);
+                outputText.append(pullOut);
+                if (!pullOut.startsWith("fatal:")) {
+                    outputText.append("Pull successful.\n");
+                } else {
+                    outputText.append("Pull failed.\n");
+                    return false;
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    // modified from https://stackoverflow.com/questions/5711084/java-runtime-getruntime-getting-output-from-executing-a-command-line-program
+    private static String getCommandOutput(Process proc) throws IOException {
+        BufferedReader stdInput = new BufferedReader(new
+                InputStreamReader(proc.getInputStream()));
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(proc.getErrorStream()));
+
+        String s = "";
+
+        // Read the output from the command
+        String output = null;
+        while ((output = stdInput.readLine()) != null) {
+            s += output + "\n";
+        }
+
+        String error = null;
+        // Read any errors from the attempted command
+        while ((error = stdError.readLine()) != null) {
+            s += error + "\n";
+        }
+
+        return s;
     }
 }

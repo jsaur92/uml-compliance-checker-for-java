@@ -49,6 +49,17 @@ public class ComplianceCheckerApplication {
     }
 
     /**
+     * Attempt to pull or clone a Git repo.
+     * @param url the url to the remote Git repo.
+     * @param parentDirPath the path to the directory to clone/pull into.
+     * @param outputText a StringBuilder representing the output of the commands.
+     * @return true if successfully cloned or pulled, false otherwise.
+     */
+    public boolean attemptPullGitRepo(String url, String parentDirPath, StringBuilder outputText) {
+        return DataWriter.attemptPullGitRepo(url, parentDirPath, outputText);
+    }
+
+    /**
      * Set the UserType of the user.
      * @param userType the UserType to set to.
      * @return true if the UserType has changed, false otherwise.
