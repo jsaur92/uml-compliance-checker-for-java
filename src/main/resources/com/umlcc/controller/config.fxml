@@ -157,12 +157,12 @@
                </font>
             </Label>
             <Label maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" text="Import .config File" textAlignment="RIGHT">
+            <Label alignment="CENTER_RIGHT" disable="true" maxHeight="1.7976931348623157E308" text="Import .config File" textAlignment="RIGHT" visible="false">
                <HBox.margin>
                   <Insets right="10.0" />
                </HBox.margin>
             </Label>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onTemplateFileClick" prefHeight="32.0" prefWidth="32.0">
+            <Button disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onTemplateFileClick" prefHeight="32.0" prefWidth="32.0" visible="false">
                <font>
                   <Font name="FreeSans" size="13.0" />
                </font>
