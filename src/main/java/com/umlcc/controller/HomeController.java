@@ -4,6 +4,8 @@ import com.umlcc.model.ComplianceCheckerApplication;
 import com.umlcc.model.Directory;
 import com.umlcc.model.UserType;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -43,7 +45,24 @@ public class HomeController {
         app = ComplianceCheckerApplication.getInstance();
         adminView = app.getUserType() != UserType.BASIC;
         updateLayout();
+        //initialize text based on user preferences
+        templateText.setText(app.getLastUmlDataPath());
+        targetText.setText(app.getLastMyCodePath());
         Platform.runLater( () -> root.requestFocus() );
+
+        templateText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                saveTemplatePath();
+            }
+        });
+
+        targetText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                saveTargetPath();
+            }
+        });
     }
 
     @FXML
@@ -61,6 +80,7 @@ public class HomeController {
     protected void onTemplateRepoClick() {
         String path = loadTemplateRepo();
         if (!path.isEmpty()) templateText.setText(path);
+        saveTemplatePath();
     }
 
     @FXML
@@ -78,6 +98,7 @@ public class HomeController {
     protected void onTargetRepoClick() {
         String path = loadTargetRepo();
         if (!path.isEmpty()) targetText.setText(path);
+        saveTargetPath();
     }
 
     @FXML
@@ -170,7 +191,7 @@ public class HomeController {
     private String loadTargetRepo() {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Open Target Repository");
-        ControllerUtil.setInitialDirectory(dirChooser, getTemplatePath());
+        ControllerUtil.setInitialDirectory(dirChooser, getTargetPath());
 
         Scene scene = root.getScene();
         if (scene == null) return "";
@@ -212,6 +233,14 @@ public class HomeController {
 
     private String getTargetPath() {
         return targetText.getText();
+    }
+
+    private void saveTemplatePath() {
+        app.setLastUmlDataPath(getTemplatePath());
+    }
+
+    private void saveTargetPath() {
+        app.setLastMyCodePath(getTargetPath());
     }
 
 

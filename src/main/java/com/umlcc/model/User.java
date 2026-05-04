@@ -108,7 +108,7 @@ public class User {
      * Mutator method for the user's last UML Data filepath.
      */
     public void setLastUmlDataPath(String lastUmlDataPath) {
-        this.lastMyCodePath = lastUmlDataPath;
+        this.lastUmlDataPath = lastUmlDataPath;
     }
 
     /**
