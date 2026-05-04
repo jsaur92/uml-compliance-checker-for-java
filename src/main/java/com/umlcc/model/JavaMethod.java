@@ -39,7 +39,7 @@ public class JavaMethod extends JavaThing {
                 tryAddWarning(results, Warning.NO_JAVADOC_PARAMETER);
             }
 
-            if (!returnType.equals("void") && getJavaDoc().getBlockTags().contains("@return")) {
+            if (!(returnType == null || returnType.equals("void")) && getJavaDoc().getBlockTags().contains("@return")) {
                 tryAddWarning(results, Warning.NO_JAVADOC_RETURN);
             }
         } else {

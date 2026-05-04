@@ -4,12 +4,36 @@
     "message": "Extra file."
   },
   {
-    "warning": "SPACING_ISSUES",
-    "message": "Spacing issues."
+    "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
+    "message": "Incorrect privacy for an attribute."
+  },
+  {
+    "warning": "MISSING_FILE",
+    "message": "Missing file."
+  },
+  {
+    "warning": "NO_JAVADOC_METHOD",
+    "message": "Missing Javadoc comment in a class."
+  },
+  {
+    "warning": "NOT_FOLLOWING_UML",
+    "message": "Not following the UML correctly."
   },
   {
     "warning": "NONE",
     "message": "No problems here!"
+  },
+  {
+    "warning": "INDENTATION_ISSUES",
+    "message": "Indentation issues."
+  },
+  {
+    "warning": "NO_JAVADOC_AUTHOR",
+    "message": "Missing @author tag in a class."
+  },
+  {
+    "warning": "NO_JAVADOC_CLASS",
+    "message": "Missing Javadoc comment in a class."
   },
   {
     "warning": "INCORRECT_PRIVACY_METHOD",
@@ -20,19 +44,19 @@
     "message": "Extra class attribute."
   },
   {
-    "warning": "NOT_FOLLOWING_UML",
-    "message": "Not following the UML correctly."
+    "warning": "NO_JAVADOC_RETURN",
+    "message": "Missing @return tag in a method."
   },
   {
-    "warning": "MISSING_FILE",
-    "message": "Missing file."
+    "warning": "NO_JAVADOC_PARAMETER",
+    "message": "Missing @param tag in a method."
   },
   {
-    "warning": "INDENTATION_ISSUES",
-    "message": "Indentation issues."
+    "warning": "NO_JAVADOC",
+    "message": "Missing Javadoc comment."
   },
   {
-    "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
-    "message": "Incorrect privacy for an attribute."
+    "warning": "SPACING_ISSUES",
+    "message": "Spacing issues."
   }
 ]}

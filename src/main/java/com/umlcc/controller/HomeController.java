@@ -91,10 +91,12 @@ public class HomeController {
     protected void onRunCheckerClick() {
         File f = new File(getTargetPath());
         if (f.exists()) {
-            if (getTemplatePath().endsWith(".umlcc")) {
-                app.loadUmlDataByUmlcc(getTemplatePath());
-            } else {
-                app.loadUmlDataByRepo(getTemplatePath());
+            if (getTemplatePath() != null) {
+                if (getTemplatePath().endsWith(".umlcc")) {
+                    app.loadUmlDataByUmlcc(getTemplatePath());
+                } else {
+                    app.loadUmlDataByRepo(getTemplatePath());
+                }
             }
             ArrayList<String> results = app.checkCompliance(getTargetPath());
             StringBuilder s = new StringBuilder();

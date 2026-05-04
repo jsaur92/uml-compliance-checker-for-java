@@ -69,6 +69,14 @@ public abstract class JavaThing {
     }
 
     /**
+     * Mutator method for comment.
+     * @param comment the new comment to set comment to.
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    /**
      * Accessor method for name.
      * @return this JavaThing's name.
      */

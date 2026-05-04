@@ -44,6 +44,7 @@ public class DataLoader extends DataConstants {
         ArrayList<JavaClass> classes = new ArrayList<JavaClass>();
         try {
             Scanner fileScanner = new Scanner(file);
+            String allText = "";
             String classText = "";
             int open_layer = 0;
             while (fileScanner.hasNext()) {
@@ -52,14 +53,16 @@ public class DataLoader extends DataConstants {
                 if (next.contains(DELIMITER_FILE_START)) {
                     open_layer++;
                 }
+                allText += next + DELIMITER_NEWLINE;
                 if (open_layer >= 1) {
                     classText += next + DELIMITER_NEWLINE;
                 }
                 if (next.contains(DELIMITER_FILE_END)) {
                     open_layer--;
                     if (open_layer == 0) {
-                        classes.add(loadClassFromRepoText(classText));
+                        classes.add(loadClassFromRepoText(classText, allText));
                         classText = "";
+                        allText = "";
                     }
                 }
             }
@@ -69,8 +72,11 @@ public class DataLoader extends DataConstants {
         return new UserFile(file.getName(), classes, ModificationRule.DONT_CARE, content);
     }
 
-    private static JavaClass loadClassFromRepoText(String text) {
-        String[] lines = text.split(DELIMITER_NEWLINE);
+    private static JavaClass loadClassFromRepoText(String classText, String allText) {
+        String comment = (hasJavaDocComment(allText))?
+                getAboveJavadocComment(allText) : "";
+
+        String[] lines = classText.split(DELIMITER_NEWLINE);
 
         Object[] headerData = parseClassHeader(lines[0]);
         String name = (String) headerData[0];
@@ -83,46 +89,58 @@ public class DataLoader extends DataConstants {
         ArrayList<JavaMethod> methods = new ArrayList<JavaMethod>();
         int open_layer = 0;
         String thisText = "";
+        String fullText = "";
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].contains(DELIMITER_SEMICOLON) && open_layer == 0) {
                 // find abstract methods
                 if (lines[i].contains(DELIMITER_METHOD_START)) {
-                    methods.add(loadMethodFromRepoText(lines[i]));
+                    methods.add(loadMethodFromRepoText(lines[i], fullText));
                 }
                 // find attribute variables
                 else {
-                    vars.add(loadVarFromRepoText(lines[i]));
+                    vars.add(loadVarFromRepoText(lines[i], fullText));
                 }
             }
             // find non-abstract methods
             if (lines[i].contains(DELIMITER_FILE_START)) {
                 open_layer++;
             }
+            fullText += lines[i] + DELIMITER_NEWLINE;
             if (open_layer >= 1) {
                 thisText += lines[i] + DELIMITER_NEWLINE;
             }
             if (lines[i].contains(DELIMITER_FILE_END)) {
                 open_layer--;
                 if (open_layer == 0) {
-                    methods.add(loadMethodFromRepoText(thisText));
+                    methods.add(loadMethodFromRepoText(thisText, fullText));
                     thisText = "";
+                    fullText = "";
                 }
             }
         }
-        return new JavaClass(name, mods, "", vars, methods, inherited, implemented, classType);
+        return new JavaClass(name, mods, comment, vars, methods, inherited, implemented, classType);
     }
 
-    private static JavaMethod loadMethodFromRepoText(String text) {
+    private static JavaMethod loadMethodFromRepoText(String text, String allText) {
+        String comment = (hasJavaDocComment(allText))?
+                getAboveJavadocComment(allText) : "";
+
         String header = text.split(DELIMITER_NEWLINE)[0];
         if (header.endsWith(DELIMITER_FILE_START) || header.endsWith(DELIMITER_NEWLINE)) header = header.substring(0, header.length()-1);
         JavaMethod method = loadMethodFromLine(header);
         method.setContent(text);
+        method.setComment(comment);
         return method;
     }
 
-    private static JavaVariable loadVarFromRepoText(String text) {
+    private static JavaVariable loadVarFromRepoText(String text, String allText) {
+        String comment = (hasJavaDocComment(allText))?
+                getAboveJavadocComment(allText) : "";
+
         if (text.endsWith(DELIMITER_SEMICOLON)) text = text.substring(0, text.length()-1);
-        return loadVarFromLine(text);
+        JavaVariable var = loadVarFromLine(text);
+        var.setComment(comment);
+        return var;
     }
 
     /**
@@ -337,5 +355,42 @@ public class DataLoader extends DataConstants {
         } catch (Exception ignore) {
         }
         return warningMessages;
+    }
+
+    /**
+     * Show if a string of text contains a Javadoc comment.
+     * @param text the text to check.
+     * @return true if there is a Javadoc comment, false otherwise.
+     */
+    private static boolean hasJavaDocComment(String text) {
+        int endIndex = text.lastIndexOf("*/");
+        if (endIndex < 0) return false;
+
+        int startIndex = text.substring(0, endIndex).lastIndexOf("/**");
+        return (startIndex > 0);
+    }
+
+    /**
+     * Parses a Javadoc comment from a String of text.
+     * @param text the text to get a Javadoc comment from
+     * @return The Javadoc comment, or an empty String if it doesn't have one.
+     */
+    private static String getAboveJavadocComment(String text) {
+        int endIndex = text.lastIndexOf("*/");
+        int startIndex = text.substring(0, endIndex).lastIndexOf("/**");
+
+        if (startIndex < 0) return "";
+        return text.substring(startIndex, endIndex+2);
+    }
+
+    /**
+     * Find the index of the end of the last Jdoc comment in a String of text.
+     * @param text the text to check from.
+     * @return The index of the last character of the Javadoc comment in the
+     * text, or -1 if there are none.
+     */
+    private static int indexOfJdocComment(String text) {
+        if (!hasJavaDocComment(text)) return -1;
+        return text.lastIndexOf("*/");
     }
 }

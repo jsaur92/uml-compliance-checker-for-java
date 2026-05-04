@@ -38,7 +38,6 @@ public class JavaClass extends JavaThing {
     @Override
     public ArrayList<EvaluationResult> checkCompliance() {
         ArrayList<EvaluationResult> results = new ArrayList<EvaluationResult>();
-
         if (!hasJavaDoc()) {
             tryAddWarning(results, Warning.NO_JAVADOC_CLASS);
         }
