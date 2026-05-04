@@ -45,10 +45,18 @@ public class JavaClass extends JavaThing {
             tryAddWarning(results, Warning.NO_JAVADOC_AUTHOR);
         }
 
-        for (JavaVariable var : variables)
-            results.addAll(var.checkCompliance());
-        for (JavaMethod method : methods)
-            results.addAll(method.checkCompliance());
+        for (JavaVariable var : variables) {
+            for (EvaluationResult er : var.checkCompliance()) {
+                er.setParent(this);
+                results.add(er);
+            }
+        }
+        for (JavaMethod method : methods) {
+            for (EvaluationResult er : method.checkCompliance()) {
+                er.setParent(this);
+                results.add(er);
+            }
+        }
 
         return results;
     }
@@ -77,10 +85,18 @@ public class JavaClass extends JavaThing {
                 tryAddWarning(results, Warning.EXTRA_NON_PRIVATE_METHOD, other);
         }
 
-        for (JavaVariable var : variables)
-            results.addAll(var.checkCompliance(otherClass.getVariable(var.getName())));
-        for (JavaMethod method : methods)
-            results.addAll(method.checkCompliance(otherClass.getMethod(method.getName())));
+        for (JavaVariable var : variables) {
+            for (EvaluationResult er : var.checkCompliance(otherClass.getVariable(var.getName()))) {
+                er.setParent(this);
+                results.add(er);
+            }
+        }
+        for (JavaMethod method : methods) {
+            for (EvaluationResult er : method.checkCompliance(otherClass.getMethod(method.getName()))) {
+                er.setParent(this);
+                results.add(er);
+            }
+        }
 
         return results;
     }

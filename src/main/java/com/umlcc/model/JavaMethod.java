@@ -11,6 +11,7 @@ public class JavaMethod extends JavaThing {
     private ArrayList<JavaVariable> parameters;
     private String returnType;
     private String content;
+    private boolean override;
 
     /**
      * Constructor for the JavaMethod class.
@@ -22,11 +23,13 @@ public class JavaMethod extends JavaThing {
      * @param content the code inside of this method.
      */
     public JavaMethod(String name, ArrayList<Modifier> modifiers, String comment,
-                     ArrayList<JavaVariable> parameters, String returnType, String content) {
+                      ArrayList<JavaVariable> parameters, String returnType, String content,
+                      boolean override) {
         super(name, modifiers, comment);
         this.parameters = parameters;
         this.returnType = returnType;
         this.content = content;
+        this.override = override;
     }
 
     @Override
@@ -42,8 +45,8 @@ public class JavaMethod extends JavaThing {
             if (!(returnType == null || returnType.equals("void")) && getJavaDoc().getBlockTags().contains("@return")) {
                 tryAddWarning(results, Warning.NO_JAVADOC_RETURN);
             }
-        } else {
-            tryAddWarning(results, Warning.NO_JAVADOC);
+        } else if (!override) {
+            tryAddWarning(results, Warning.NO_JAVADOC_METHOD);
         }
 
         return results;
@@ -143,6 +146,14 @@ public class JavaMethod extends JavaThing {
      */
     public void setContent(String content) {
         this.content = content;
+    }
+
+    /**
+     * Mutator method for whether or not this method is an override.
+     * @param override the new state for override
+     */
+    public void setOverride(boolean override) {
+        this.override = override;
     }
 
     @Override

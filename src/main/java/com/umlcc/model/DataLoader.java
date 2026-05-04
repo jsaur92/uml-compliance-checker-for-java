@@ -125,11 +125,15 @@ public class DataLoader extends DataConstants {
         String comment = (hasJavaDocComment(allText))?
                 getAboveJavadocComment(allText) : "";
 
-        String header = text.split(DELIMITER_NEWLINE)[0];
+        String[] split = text.split(DELIMITER_NEWLINE);
+        String[] allSplit = allText.split(DELIMITER_NEWLINE);
+
+        String header = split[0];
         if (header.endsWith(DELIMITER_FILE_START) || header.endsWith(DELIMITER_NEWLINE)) header = header.substring(0, header.length()-1);
         JavaMethod method = loadMethodFromLine(header);
         method.setContent(text);
         method.setComment(comment);
+        method.setOverride( allSplit[allSplit.length - split.length].contains("@Override") );
         return method;
     }
 
@@ -287,7 +291,7 @@ public class DataLoader extends DataConstants {
             }
         }
 
-        return new JavaMethod(name, mods, "", p, type, "");
+        return new JavaMethod(name, mods, "", p, type, "", false);
     }
 
     private static JavaVariable loadVarFromLine(String line) {

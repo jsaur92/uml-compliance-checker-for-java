@@ -1,62 +1,62 @@
 {"warnings": [
   {
-    "warning": "EXTRA_FILE",
-    "message": "Extra file."
-  },
-  {
-    "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
-    "message": "Incorrect privacy for an attribute."
-  },
-  {
-    "warning": "MISSING_FILE",
-    "message": "Missing file."
-  },
-  {
-    "warning": "NO_JAVADOC_METHOD",
-    "message": "Missing Javadoc comment in a class."
-  },
-  {
-    "warning": "NOT_FOLLOWING_UML",
-    "message": "Not following the UML correctly."
-  },
-  {
     "warning": "NONE",
     "message": "No problems here!"
   },
   {
-    "warning": "INDENTATION_ISSUES",
-    "message": "Indentation issues."
+    "warning": "NO_JAVADOC_PARAMETER",
+    "message": "Missing @param tag for Javadoc comment of method $THIS of class $PARENT."
   },
   {
-    "warning": "NO_JAVADOC_AUTHOR",
-    "message": "Missing @author tag in a class."
-  },
-  {
-    "warning": "NO_JAVADOC_CLASS",
-    "message": "Missing Javadoc comment in a class."
+    "warning": "EXTRA_FILE",
+    "message": "Extra file."
   },
   {
     "warning": "INCORRECT_PRIVACY_METHOD",
-    "message": "Incorrect privacy for a method."
+    "message": "Incorrect privacy for method $THIS of class $PARENT."
   },
   {
-    "warning": "EXTRA_CLASS_ATTRIBUTE",
-    "message": "Extra class attribute."
+    "warning": "NOT_FOLLOWING_UML",
+    "message": "Not following the UML correctly in $THIS."
   },
   {
-    "warning": "NO_JAVADOC_RETURN",
-    "message": "Missing @return tag in a method."
-  },
-  {
-    "warning": "NO_JAVADOC_PARAMETER",
-    "message": "Missing @param tag in a method."
+    "warning": "NO_JAVADOC_METHOD",
+    "message": "Missing Javadoc comment in method $THIS of class $PARENT."
   },
   {
     "warning": "NO_JAVADOC",
     "message": "Missing Javadoc comment."
   },
   {
+    "warning": "INDENTATION_ISSUES",
+    "message": "Indentation issues."
+  },
+  {
+    "warning": "INCORRECT_PRIVACY_ATTRIBUTE",
+    "message": "Incorrect privacy for attribute $THIS of class $PARENT."
+  },
+  {
+    "warning": "MISSING_FILE",
+    "message": "Missing file."
+  },
+  {
+    "warning": "EXTRA_CLASS_ATTRIBUTE",
+    "message": "Extra class attribute in $THIS."
+  },
+  {
     "warning": "SPACING_ISSUES",
     "message": "Spacing issues."
+  },
+  {
+    "warning": "NO_JAVADOC_AUTHOR",
+    "message": "Missing @author tag for Javadoc header comment of class $THIS."
+  },
+  {
+    "warning": "NO_JAVADOC_RETURN",
+    "message": "Missing @return tag for Javadoc comment of method $THIS of class $PARENT."
+  },
+  {
+    "warning": "NO_JAVADOC_CLASS",
+    "message": "Missing Javadoc header comment for class $THIS."
   }
 ]}

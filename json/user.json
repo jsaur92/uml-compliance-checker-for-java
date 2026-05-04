@@ -3,6 +3,6 @@
   "clonePattern": "NONE",
   "defaultCloneParent": "",
   "deleteClonedOnClose": false,
-  "userType": "BASIC",
+  "userType": "ADMIN",
   "lastUmlDataPath": ""
 }
